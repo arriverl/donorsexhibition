@@ -8,6 +8,7 @@
   --color-text: #1a1a1a;
   --color-text-muted: #4a4040;
   color: #1a1a1a;
+  padding-top: 3.5rem;
 }
 
 .timelineContainer {
@@ -122,6 +123,42 @@
   transform: translateX(0);
 }
 
+/* 序言节点（第一个节点） */
+.contentIntro {
+  /* 显式宽度修复绝对定位 shrink-to-fit 折叠（否则每行只剩 1~2 字）。
+     用 em 单位：宽度随字号缩放，始终保持每行约 30 个汉字；
+     min() 防止窄屏溢出右侧。 */
+  width: min(31em, 62vw);
+  font-size: 29.2px;
+  font-weight: 600;
+  align-items: flex-start;
+}
+
+.intro {
+  width: 100%;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.active .intro {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.intro p {
+  font-family: var(--font-display, 'Noto Serif SC', serif);
+  font-size: inherit;
+  line-height: 1.8;
+  color: var(--color-text, #1a1a1a);
+  margin-bottom: 0.8em;
+  letter-spacing: 0.02em;
+}
+
+.intro p:last-child {
+  margin-bottom: 0;
+}
+
 /* ========== 洞窟横截面图层 ========== */
 .crossSection {
   position: absolute;
@@ -130,6 +167,33 @@
   width: 100%;
   z-index: 2;
   pointer-events: none;
+}
+
+/* 云彩图层 */
+.cloudContainer {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+  z-index: 3;
+}
+
+.cloudImg {
+  position: absolute;
+  height: 100%;
+  width: auto;
+  animation: cloudFloat 30s linear infinite;
+}
+
+@keyframes cloudFloat {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100vw);
+  }
 }
 
 .crossSection button {

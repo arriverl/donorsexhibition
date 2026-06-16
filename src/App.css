@@ -1,8 +1,8 @@
 :root {
-  --color-bg: #0a0a0f;
-  --color-text: #e8e6e3;
-  --color-text-muted: #8a8a8a;
-  --color-accent: #c9a96e;
+  --color-bg: #E2D2B8;
+  --color-text: #1a1a1a;
+  --color-text-muted: #4a4a4a;
+  --color-accent: #8B5A2B;
 
   --font-display: 'Noto Serif SC', serif;
   --font-body: 'Noto Sans SC', sans-serif;
@@ -47,6 +47,7 @@ body {
   justify-content: center;
   padding: var(--section-padding-y) var(--section-padding-x);
   position: relative;
+  padding-top: max(var(--section-padding-y), 3.5rem);
 }
 
 .section__inner {
@@ -99,14 +100,4 @@ body {
   height: 10vh;
   position: relative;
   background: var(--color-bg);
-}
-
-/* Chapter background styling - all chapters use same background */
-.prologue,
-.chapter1,
-.section--chapter-2,
-.section--chapter-3,
-.section--chapter-4 {
-  background-color: #E2D2B8 !important;
-  color: #1a1a1a !important;
 }

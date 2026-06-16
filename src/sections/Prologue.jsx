@@ -6,6 +6,14 @@ import styles from './Prologue.module.css'
 gsap.registerPlugin(ScrollTrigger)
 
 const timelineData = [
+  {
+    period: '序',
+    intro: [
+      '地处河西走廊西端，敦煌自古是东西文明的交汇口。三千载岁月，月氏、匈奴、汉人、粟特人在此往来。在敦煌，人们找到了被历史铭记的方式——石壁上，身影因描摹而隽永；石壁下，世家绵延的故事静待发掘。',
+      '敦煌阴氏，自河西走来。五百年间，他们开窟造像，联姻通婚，顺势而起，始终活跃于敦煌政教舞台之上。',
+      '透过供养人画像，我们将追寻阴氏家族的兴衰轨迹。回到千年前，凝视那些被石壁记住的身影与名字。',
+    ],
+  },
   { period: '西魏', caves: '285窟' },
   { period: '初唐', caves: '431窟、432窟、96窟、321窟、322窟' },
   { period: '盛唐', caves: '129窟、148窟、166窟、199窟、208窟、217窟、225窟' },
@@ -15,6 +23,7 @@ const timelineData = [
 ]
 
 const cavesByPeriod = [
+  [],
   ['285'],
   ['431', '432', '96', '321', '322'],
   ['129', '148', '166', '199', '208', '217', '225'],
@@ -27,43 +36,31 @@ const allCaves = cavesByPeriod.flat()
 
 const ANGLE_STEP = 25
 
-export default function Prologue({ onUnlock }) {
+export default function Prologue() {
   const sectionRef = useRef(null)
   const wheelRef = useRef(null)
   const wrapperRefs = useRef([])
   const [activeIndex, setActiveIndex] = useState(0)
-  const [outroPlayed, setOutroPlayed] = useState(false)
-  const crossSectionRef = useRef(null)
+  const itemRefs = useRef([])
+  const subItemRefs = useRef([])
 
-  const playOutro = useCallback(() => {
-    if (outroPlayed) return
-    setOutroPlayed(true)
-    const wheel = wheelRef.current
-    const tl = gsap.timeline({
-      onComplete: () => {
-        onUnlock()
-      },
+  // 根据圆盘旋转角度控制各节点显隐：进入序章时仅显示第一个（序言）节点，
+  // 用户向下滚动时其他节点随旋转依次浮现。
+  const applyNodeOpacity = useCallback((rotation) => {
+    itemRefs.current.forEach((el, i) => {
+      if (!el) return
+      const op = i === 0
+        ? 1
+        : Math.max(0, Math.min(1, (rotation - (i - 1) * ANGLE_STEP) / ANGLE_STEP))
+      el.style.opacity = op
     })
-    tl.to(wheel, {
-      rotation: 0,
-      duration: 0.8,
-      ease: 'power2.inOut',
-      onUpdate: () => {
-        const r = gsap.getProperty(wheel, 'rotation')
-        wrapperRefs.current.forEach((wrapper, index) => {
-          if (!wrapper) return
-          wrapper.style.transform = `rotate(${-(index * ANGLE_STEP + r)}deg)`
-        })
-        setActiveIndex(Math.max(0, Math.round(-r / ANGLE_STEP)))
-      },
+    subItemRefs.current.forEach((el, i) => {
+      if (!el) return
+      // 子节点位于节点 i 与 i+1 之间，随节点 i+1 一同浮现
+      const op = Math.max(0, Math.min(1, (rotation - i * ANGLE_STEP) / ANGLE_STEP))
+      el.style.opacity = op
     })
-    .to(crossSectionRef.current, {
-      scale: 5,
-      transformOrigin: '90% 85%',
-      duration: 1.2,
-      ease: 'power2.inOut',
-    }, '>-0.2')
-  }, [outroPlayed, onUnlock])
+  }, [])
 
   useEffect(() => {
     const section = sectionRef.current
@@ -73,17 +70,21 @@ export default function Prologue({ onUnlock }) {
     const numItems = timelineData.length
     const maxRotation = (numItems - 1) * ANGLE_STEP
 
+    // 圆盘旋转在前 700vh（7/8）内完成，最后 100vh 用于淡出，过渡到第一单元
+    const ROT_END = 7 / 8
+
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
         trigger: section,
         start: 'top top',
-        end: '+=600%',
+        end: '+=800%',
         pin: true,
         pinSpacing: true,
         anticipatePin: 1,
         scrub: 1,
         onUpdate: (self) => {
-          const rotation = self.progress * maxRotation
+          const p = self.progress
+          const rotation = Math.min(p / ROT_END, 1) * maxRotation
           wheelEl.style.transform = `rotate(${-rotation}deg)`
           wrapperRefs.current.forEach((wrapper, index) => {
             if (!wrapper) return
@@ -91,15 +92,22 @@ export default function Prologue({ onUnlock }) {
             const netRotation = angle - rotation
             wrapper.style.transform = `rotate(${-netRotation}deg)`
           })
+          applyNodeOpacity(rotation)
           let newActive = Math.round(rotation / ANGLE_STEP)
           newActive = Math.max(0, Math.min(numItems - 1, newActive))
           setActiveIndex(newActive)
+          // 末段淡出：圆盘转完后整页淡出，衔接第一单元
+          const fade = Math.max(0, (p - ROT_END) / (1 - ROT_END))
+          section.style.opacity = String(1 - fade)
         },
       })
     }, section)
 
+    // 初始化：仅显示第一个（序言）节点
+    applyNodeOpacity(0)
+
     return () => ctx.revert()
-  }, [])
+  }, [applyNodeOpacity])
 
   const activeCaves = new Set(
     cavesByPeriod.slice(0, activeIndex + 1).flat()
@@ -125,26 +133,40 @@ export default function Prologue({ onUnlock }) {
               <div key={`main-${i}`}>
                 <div
                   className={containerClass}
-                  style={{ transform: `rotate(${angle}deg)` }}
+                  ref={(el) => { itemRefs.current[i] = el }}
+                  style={{ transform: `rotate(${angle}deg)`, opacity: i === 0 ? 1 : 0 }}
                 >
                   <div className={styles.dot} />
                   <div
                     className={styles.contentWrapper}
                     ref={(el) => { wrapperRefs.current[i] = el }}
                   >
-                    <div className={styles.content}>
-                      <div className={styles.period}>{data.period}</div>
-                      <div className={styles.details}>
-                        <div className={styles.cavesTitle}>代表洞窟</div>
-                        <div className={styles.cavesList}>{data.caves}</div>
-                      </div>
+                    <div
+                      className={`${styles.content} ${data.intro ? styles.contentIntro : ''}`}
+                    >
+                      {data.intro ? (
+                        <div className={styles.intro}>
+                          {data.intro.map((p, idx) => (
+                            <p key={idx}>{p}</p>
+                          ))}
+                        </div>
+                      ) : (
+                        <>
+                          <div className={styles.period}>{data.period}</div>
+                          <div className={styles.details}>
+                            <div className={styles.cavesTitle}>代表洞窟</div>
+                            <div className={styles.cavesList}>{data.caves}</div>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
                 {i < timelineData.length - 1 && (
                   <div
                     className={`${styles.itemContainer} ${styles.subItem}`}
-                    style={{ transform: `rotate(${angle + ANGLE_STEP / 2}deg)` }}
+                    ref={(el) => { subItemRefs.current[i] = el }}
+                    style={{ transform: `rotate(${angle + ANGLE_STEP / 2}deg)`, opacity: 0 }}
                   >
                     <div className={styles.dot} />
                   </div>
@@ -155,31 +177,20 @@ export default function Prologue({ onUnlock }) {
         </div>
 
         {/* 洞窟横截面图层 */}
-        <div className={styles.crossSection} ref={crossSectionRef}>
+        <div className={styles.crossSection}>
+          {/* 云彩图层 */}
+          <div className={styles.cloudContainer}>
+            <img
+              src="/picture/prologue/云彩.png"
+              alt="云彩"
+              className={styles.cloudImg}
+            />
+          </div>
           <img
             src="/picture/prologue/横截面.png"
             alt="洞窟横截面"
             className={styles.crossSectionImg}
           />
-          {/* 交互点：曹氏归义军时期显示，位于红框位置（右下角） */}
-          {activeIndex === 5 && !outroPlayed && (
-            <button
-              onClick={playOutro}
-              style={{
-                position: 'absolute',
-                right: '18%',
-                bottom: '18%',
-                width: '40px',
-                height: '40px',
-                borderRadius: '50%',
-                border: '2px solid rgba(255,255,255,0.85)',
-                background: 'transparent',
-                cursor: 'pointer',
-                zIndex: 3,
-                animation: 'hotspotPulse 2s ease-in-out infinite',
-              }}
-            />
-          )}
         </div>
 
       </div>

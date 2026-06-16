@@ -1,0 +1,155 @@
+/* 背景遮罩 */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 1000;
+}
+.backdropShow {
+  opacity: 1;
+}
+
+/* 从右侧拉出的展品卡片窗口 */
+.panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 75vw;
+  max-width: 1400px;
+  background: rgba(10, 10, 10, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: #f4f1ec;
+  z-index: 1001;
+  transform: translateX(100%);
+  transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+  display: flex;
+  overflow: hidden;
+  box-shadow: -30px 0 80px rgba(0, 0, 0, 0.6);
+}
+.panelShow {
+  transform: translateX(0);
+}
+
+/* 图片在左 / 文字在右 */
+.panelLeft {
+  flex-direction: row;
+}
+
+/* 图片在上 / 文字在下 */
+.panelTop {
+  flex-direction: column;
+}
+
+/* 图片区 */
+.imageArea {
+  flex: 0 0 48%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  overflow: hidden;
+  min-height: 0;
+}
+.panelTop .imageArea {
+  flex: 0 0 55%;
+  width: 100%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.imageArea img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* 文字区 */
+.textArea {
+  flex: 1;
+  min-width: 0;
+  padding: clamp(2rem, 5vw, 5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-y: auto;
+}
+.panelTop .textArea {
+  width: 100%;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.2vw, 2rem);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: #f4f1ec;
+  margin-bottom: 0.6rem;
+  line-height: 1.4;
+}
+
+.subtitle {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: #a8a29a;
+  margin-bottom: 1.6rem;
+  letter-spacing: 0.04em;
+}
+
+.divider {
+  width: 48px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.25);
+  margin-bottom: 1.6rem;
+}
+
+.description {
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 1.15vw, 1.05rem);
+  color: #c9c3ba;
+  line-height: 2.1;
+  letter-spacing: 0.02em;
+}
+
+/* 关闭按钮 */
+.close {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  color: #f4f1ec;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 5;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+.close:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: rotate(90deg);
+}
+
+@media (max-width: 768px) {
+  .panel {
+    width: 100vw;
+  }
+  .panelLeft {
+    flex-direction: column;
+  }
+  .panelLeft .imageArea {
+    flex: 0 0 40%;
+    width: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+}

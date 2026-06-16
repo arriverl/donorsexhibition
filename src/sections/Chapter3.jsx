@@ -876,11 +876,21 @@ export default function Chapter3() {
           </div>
         </div>
 
-        {/* 中间五个图片占位符 */}
+        {/* 中间五个图片 */}
         <div className={styles.exhibit7ImagesContainer}>
-          {[...Array(5)].map((_, i) => (
-            <div key={i} className={styles.exhibit7ImagePlaceholder}>
-              <span className={styles.exhibit7ImageText}>图片占位符 {i + 1}</span>
+          {[
+            '/picture/chap3/吐蕃告身1.png',
+            '/picture/chap3/吐蕃告身2.png',
+            '/picture/chap3/吐蕃告身3.png',
+            '/picture/chap3/吐蕃告身4.png',
+            '/picture/chap3/吐蕃告身5.png'
+          ].map((src, i) => (
+            <div key={i} className={`${styles.exhibit7ImagePlaceholder} ${styles.exhibit7WithImage}`}>
+              <img
+                src={src}
+                alt={`吐蕃告身 ${i + 1}`}
+                className={styles.exhibit7ActualImage}
+              />
             </div>
           ))}
         </div>

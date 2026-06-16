@@ -28,6 +28,19 @@
   will-change: transform, height;
 }
 
+/* 单元标题图：置于供养菩萨像左侧，缩放阶段淡出 */
+.g1Title {
+  position: absolute;
+  left: 3%;
+  top: 50%;
+  height: 20vh;
+  width: auto;
+  transform: translateY(-50%);
+  z-index: 5;
+  pointer-events: none;
+  will-change: opacity;
+}
+
 .g1HotspotWrap {
   position: absolute;
   top: 0;
@@ -128,6 +141,32 @@
   width: auto;
 }
 
+/* 女贵族供养人：图片 + 跟随文字的组合（动画作用于此容器，宽度仍等于图片宽度） */
+.walkGroup {
+  position: absolute;
+  display: block;
+  will-change: transform, opacity;
+}
+
+.walkText {
+  position: absolute;
+  right: calc(100% + 2.25rem);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40em;
+  max-width: 44vw;
+  padding-right: 2rem;
+  border-right: 1px solid rgba(139, 94, 42, 0.45);
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 1.05vw, 1.12rem);
+  line-height: 2.1;
+  letter-spacing: 0.02em;
+  color: var(--color-text);
+  text-align: justify;
+  text-justify: inter-ideograph;
+  hanging-punctuation: first;
+}
+
 /* Merge scene - three images combining */
 .mergeScene {
   position: relative;
@@ -136,6 +175,54 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* 走马灯：三屏横向轮播 */
+.carouselScene {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.carouselTrack {
+  display: flex;
+  width: 300vw;
+  height: 100vh;
+  will-change: transform;
+}
+
+.carouselPanel {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  flex-shrink: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 走马灯面板内：图片 + 伴随文字成组，整组随进场动画与面板横滑移动 */
+.figureGroup {
+  display: flex;
+  align-items: center;
+  gap: 2.25rem;
+  will-change: transform, opacity;
+}
+
+.figureText {
+  max-width: 32vw;
+  margin: 0;
+  padding-left: 2rem;
+  border-left: 1px solid rgba(139, 94, 42, 0.45);
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 1.05vw, 1.12rem);
+  line-height: 2.1;
+  letter-spacing: 0.02em;
+  color: var(--color-text);
+  text-align: justify;
+  text-justify: inter-ideograph;
 }
 
 .mergeImages {
@@ -161,6 +248,30 @@
 }
 .mergeImage:nth-child(3) {
   left: 65%;
+  max-height: 90vh;
+}
+
+.mergeCaption {
+  position: absolute;
+  top: 15vh;
+  left: 3vw;
+  width: 30em;
+  max-width: 34vw;
+  margin: 0;
+  padding: 1rem 1.4rem;
+  border-left: 2px solid var(--color-accent);
+  font-family: var(--font-display);
+  font-size: clamp(0.9rem, 1vw, 1.05rem);
+  line-height: 2;
+  letter-spacing: 0.02em;
+  color: var(--color-text);
+  text-align: justify;
+  text-justify: inter-ideograph;
+  background: rgba(226, 210, 184, 0.55);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  z-index: 5;
+  pointer-events: none;
 }
 
 /* Pinned scenes */
@@ -226,6 +337,24 @@
   align-items: center;
 }
 
+/* 贵族供养人 → 平民/奴隶供养人 的过渡文字（贴在并列展项画像上方，不额外占高） */
+.transitionCaption {
+  position: absolute;
+  top: 15vh;
+  left: 0;
+  right: 0;
+  max-width: 50em;
+  margin: 0 auto;
+  padding: 0 6vw;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.4vw, 1.3rem);
+  line-height: 2;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  text-align: center;
+  z-index: 1;
+}
+
 .dualItem {
   position: relative;
   display: flex;
@@ -243,7 +372,8 @@
 
 .vowText {
   font-family: var(--font-display);
-  font-size: clamp(0.75rem, 1.4vw, 1rem);
+  font-size: 28px;
+  text-align: left;
   color: var(--color-text);
   writing-mode: vertical-rl;
   text-orientation: mixed;
@@ -340,6 +470,18 @@
 
   .walkFigure {
     max-width: 70vw;
+  }
+
+  .walkText {
+    position: relative;
+    right: auto;
+    top: auto;
+    transform: none;
+    width: auto;
+    max-width: 86vw;
+    margin-top: 1.5rem;
+    padding-right: 0;
+    border-right: none;
   }
 
   .characterCards {

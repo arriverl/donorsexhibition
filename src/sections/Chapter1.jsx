@@ -70,6 +70,7 @@ export default function Chapter1() {
   const g1ImageRef = useRef(null)
   const g1HotspotRef = useRef(null)
   const g1TextRef = useRef(null)
+  const g1TitleRef = useRef(null)
 
   // Group 2 refs
   const g2WalkSceneRef = useRef(null)
@@ -77,19 +78,19 @@ export default function Chapter1() {
   const g2WalkOverlayRef = useRef(null)
   const g2WalkHotspotRef = useRef(null)
 
-  const g2MergeSceneRef = useRef(null)
+  const g2CarouselSceneRef = useRef(null)
+  const g2CarouselTrackRef = useRef(null)
   const g2MergeImg1Ref = useRef(null)
   const g2MergeImg2Ref = useRef(null)
   const g2MergeImg3Ref = useRef(null)
   const g2MergeOverlayRef = useRef(null)
   const g2MergeHotspotRef = useRef(null)
   const g2MergeFullRef = useRef(null)
+  const g2MergeCaptionRef = useRef(null)
 
-  const g2KingSceneRef = useRef(null)
   const g2KingFigureRef = useRef(null)
   const g2KingHotspotRef = useRef(null)
 
-  const g2WomanSceneRef = useRef(null)
   const g2WomanFigureRef = useRef(null)
   const g2WomanHotspotRef = useRef(null)
 
@@ -116,6 +117,7 @@ export default function Chapter1() {
       gsap.set(g1ImageRef.current, { xPercent: -50, yPercent: 0 })
       gsap.set(g1TextRef.current, { xPercent: 0, yPercent: -50, y: '60vh', opacity: 0 })
       gsap.set(g1HotspotRef.current, { opacity: 0, scale: 0.5 })
+      gsap.set(g1TitleRef.current, { opacity: 1 })
       gsap.set(g2KingHotspotRef.current, { opacity: 0 })
       gsap.set(g2WomanHotspotRef.current, { opacity: 0 })
 
@@ -131,6 +133,7 @@ export default function Chapter1() {
       g1tl
         .to(g1ImageRef.current, { yPercent: -37, duration: 1.2, ease: 'none' }) // 从头滚到底
         .to(g1ImageRef.current, { height: '85vh', left: '25%', top: '50%', yPercent: -50, duration: 1, ease: 'power2.inOut' }, '+=0.1')
+        .to(g1TitleRef.current, { opacity: 0, duration: 0.6, ease: 'power2.in' }, '<') // 单元标题随供养菩萨像缩放淡出
         .to(g1TextRef.current, { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out' }, '<0.2')
         .to(g1HotspotRef.current, { opacity: 1, scale: 1, duration: 0.3 }, '<0.5')
 
@@ -148,7 +151,7 @@ export default function Chapter1() {
         .fromTo(
           g2WalkFigureRef.current,
           { xPercent: -120, opacity: 0 },
-          { xPercent: 25, opacity: 1, duration: 1 }
+          { xPercent: 40, opacity: 1, duration: 1 }
         )
         .fromTo(
           g2WalkHotspotRef.current,
@@ -157,95 +160,43 @@ export default function Chapter1() {
           '>'
         )
 
-      // === Group 2, Figure 2: Merge ===
-      const g2Mergetl = gsap.timeline({
+      // === Group 2: 走马灯 — 礼佛图三图合并 → 国王像 → 五代女供养人 ===
+      gsap.set(g2KingFigureRef.current, { opacity: 0 })
+      gsap.set(g2WomanFigureRef.current, { opacity: 0 })
+
+      const g2Carouseltl = gsap.timeline({
         scrollTrigger: {
-          trigger: g2MergeSceneRef.current,
+          trigger: g2CarouselSceneRef.current,
           start: 'top top',
-          end: '+=350%',
+          end: '+=1000%',
           pin: true,
           scrub: 1,
+          invalidateOnRefresh: true,
         },
       })
-      g2Mergetl
-        .to(g2MergeImg1Ref.current, {
-          xPercent: 100,
-          scale: 1.3,
-          duration: 1,
-        })
-        .to(
-          g2MergeImg3Ref.current,
-          { xPercent: -100, scale: 1.3, duration: 1 },
-          '<'
-        )
-        .to(
-          g2MergeImg2Ref.current,
-          { scale: 1.5, duration: 1 },
-          '<'
-        )
+      g2Carouseltl
+        // — 礼佛图三图合并 —
+        .to(g2MergeImg1Ref.current, { xPercent: 100, scale: 1.3, duration: 1 })
+        .to(g2MergeImg3Ref.current, { xPercent: -100, scale: 1.3, duration: 1 }, '<')
+        .to(g2MergeImg2Ref.current, { scale: 1.5, duration: 1 }, '<')
         .to(
           [g2MergeImg1Ref.current, g2MergeImg2Ref.current, g2MergeImg3Ref.current],
           { opacity: 0, duration: 0.4 },
           '+=0.1'
         )
-        .fromTo(
-          g2MergeFullRef.current,
-          { opacity: 0 },
-          { opacity: 1, duration: 0.5 },
-          '<'
-        )
-        .fromTo(
-          g2MergeHotspotRef.current,
-          { opacity: 0, scale: 0.5 },
-          { opacity: 1, scale: 1, duration: 0.4 },
-          '<'
-        )
-
-      // === Group 2, Figure 3: King of Khotan (two-page) ===
-      const g2Kingtl = gsap.timeline({
-        scrollTrigger: {
-          trigger: g2KingSceneRef.current,
-          start: 'top top',
-          end: '+=200%',
-          pin: true,
-          scrub: 1,
-        },
-      })
-      g2Kingtl
-        .fromTo(
-          g2KingFigureRef.current,
-          { yPercent: 0 },
-          { yPercent: -30, duration: 1 }
-        )
-        .fromTo(
-          g2KingHotspotRef.current,
-          { opacity: 0 },
-          { opacity: 1, duration: 0.3 },
-          0
-        )
-
-      // === Group 2, Figure 4: Five Dynasties Woman ===
-      const g2Womantl = gsap.timeline({
-        scrollTrigger: {
-          trigger: g2WomanSceneRef.current,
-          start: 'top top',
-          end: '+=200%',
-          pin: true,
-          scrub: 1,
-        },
-      })
-      g2Womantl
-        .fromTo(
-          g2WomanFigureRef.current,
-          { yPercent: 0 },
-          { yPercent: -30, duration: 1 }
-        )
-        .fromTo(
-          g2WomanHotspotRef.current,
-          { opacity: 0 },
-          { opacity: 1, duration: 0.3 },
-          0
-        )
+        .fromTo(g2MergeFullRef.current, { opacity: 0 }, { opacity: 1, duration: 0.5 }, '<')
+        .fromTo(g2MergeCaptionRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, '<0.2')
+        .fromTo(g2MergeHotspotRef.current, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.4 }, '<')
+        // — 走马灯：礼佛图 → 国王像 —
+        .to(g2CarouselTrackRef.current, { x: () => -window.innerWidth, duration: 1.2, ease: 'none' }, '+=0.3')
+        .fromTo(g2KingFigureRef.current, { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 0.6 }, '<0.2')
+        .fromTo(g2KingHotspotRef.current, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.4 }, '<0.3')
+        .to({}, { duration: 0.6 }) // 国王像停留
+        // — 走马灯：国王像 → 五代女供养人 —
+        .to(g2CarouselTrackRef.current, { x: () => -window.innerWidth * 2, duration: 1.2, ease: 'none' })
+        .fromTo(g2WomanFigureRef.current, { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 0.6 }, '<0.2')
+        .fromTo(g2WomanHotspotRef.current, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.4 }, '<0.3')
+        .to({}, { duration: 0.6 }) // 五代女供养人停留
 
       // === Group 2, Figure 5: Dual ===
       gsap.fromTo(
@@ -325,6 +276,13 @@ export default function Chapter1() {
       <div className={styles.group}>
         {/* 展项：第431窟 供养菩萨 */}
         <div ref={g1SceneRef} className={styles.g1Scene}>
+          {/* 单元标题：初始在左侧，随供养菩萨像缩小时淡出 */}
+          <img
+            ref={g1TitleRef}
+            src="/picture/chap1/单元标题1.PNG?v=3"
+            alt="第一单元标题"
+            className={styles.g1Title}
+          />
           {/* 图片：初始居中超大，动画后缩至左侧 */}
           <img
             ref={g1ImageRef}
@@ -371,13 +329,16 @@ export default function Chapter1() {
               className={styles.overlay}
               style={{ opacity: 0 }}
             />
-            <img
-              ref={g2WalkFigureRef}
-              src="/picture/chap1/第285窟北壁第一铺 女贵族供养人.png"
-              alt="第285窟 女贵族供养人"
-              className={styles.walkFigure}
-              style={{ height: '75vh', width: 'auto' }}
-            />
+            <div ref={g2WalkFigureRef} className={styles.walkGroup}>
+              <img
+                src="/picture/chap1/第285窟北壁第一铺 女贵族供养人.png"
+                alt="第285窟 女贵族供养人"
+                style={{ height: '75vh', width: 'auto', display: 'block' }}
+              />
+              <p className={styles.walkText}>
+                供养人画像所呈现的群体并不局限于某一阶层。从已发现的洞窟题记和图像来看，供养人身份跨度很大，既有地方权贵，也有普通僧尼、平民信众，甚至像古代奴隶这样身份低微的形象也被绘入壁画。这种身份上的混杂说明，能否被绘制上墙，取决于的并非社会地位，而是是否有发愿造像、施舍财物的虔诚之举——只要做出供养行为，无论贵贱，都有机会以画像和题名的方式被留存在石壁上，成为后世可考的痕迹。
+              </p>
+            </div>
             <Hotspot
               ref={g2WalkHotspotRef}
               x={55}
@@ -394,119 +355,126 @@ export default function Chapter1() {
           </div>
         </div>
 
-        {/* 展项：盛唐 第130窟 都督夫人礼佛图（三图合并动画） */}
-        <div ref={g2MergeSceneRef} className={styles.scene}>
-          <div className={styles.mergeScene}>
-            <div
-              ref={g2MergeOverlayRef}
-              className={styles.overlay}
-              style={{ opacity: 0 }}
-            />
-            <div className={styles.mergeImages}>
-              <img
-                ref={g2MergeImg1Ref}
-                src="/picture/chap1/礼佛图左.png"
-                alt="礼佛图 左"
-                className={styles.mergeImage}
-                style={{ height: '60vh', width: 'auto' }}
+        {/* 展项：走马灯 — 都督夫人礼佛图（三图合并）→ 于阗国王 → 五代女供养人 */}
+        <div ref={g2CarouselSceneRef} className={styles.carouselScene}>
+          <div ref={g2CarouselTrackRef} className={styles.carouselTrack}>
+            {/* 第 1 屏：盛唐 第130窟 都督夫人礼佛图（三图合并动画） */}
+            <div className={styles.carouselPanel}>
+              <div
+                ref={g2MergeOverlayRef}
+                className={styles.overlay}
+                style={{ opacity: 0 }}
               />
+              <div className={styles.mergeImages}>
+                <img
+                  ref={g2MergeImg1Ref}
+                  src="/picture/chap1/礼佛图左.png"
+                  alt="礼佛图 左"
+                  className={styles.mergeImage}
+                  style={{ height: '60vh', width: 'auto' }}
+                />
+                <img
+                  ref={g2MergeImg2Ref}
+                  src="/picture/chap1/礼佛图中.png"
+                  alt="礼佛图 中"
+                  className={styles.mergeImage}
+                  style={{ height: '60vh', width: 'auto' }}
+                />
+                <img
+                  ref={g2MergeImg3Ref}
+                  src="/picture/chap1/礼佛图右.png"
+                  alt="礼佛图 右"
+                  className={styles.mergeImage}
+                  style={{ height: '85vh', width: 'auto' }}
+                />
+              </div>
+              {/* 合并后全图 */}
               <img
-                ref={g2MergeImg2Ref}
-                src="/picture/chap1/礼佛图中.png"
-                alt="礼佛图 中"
-                className={styles.mergeImage}
-                style={{ height: '60vh', width: 'auto' }}
+                ref={g2MergeFullRef}
+                src="/picture/chap1/段文杰复原临摹莫高窟 130窟 都督夫人礼佛图.png"
+                alt="都督夫人礼佛图"
+                style={{ position: 'absolute', height: '90vh', width: 'auto', opacity: 0 }}
               />
-              <img
-                ref={g2MergeImg3Ref}
-                src="/picture/chap1/礼佛图右.png"
-                alt="礼佛图 右"
-                className={styles.mergeImage}
-                style={{ height: '60vh', width: 'auto' }}
+              <p ref={g2MergeCaptionRef} className={styles.mergeCaption}>
+                贵族供养像在敦煌壁画中极为常见，其中不乏雍容华贵的女性形象，多以功德主家眷的身份出现于洞窟之中。虽然，记载中的开窟功德主大多数为男性，但若进一步追问营建一座洞窟所需的资源调度、人脉维系乃至家族决策过程，女性在其中扮演的角色未必只是陪衬。
+              </p>
+              <Hotspot
+                ref={g2MergeHotspotRef}
+                x={50}
+                y={50}
+                active={activePanel === 'governorWife'}
+                onClick={() => togglePanel('governorWife')}
+              />
+              <ExhibitPanel
+                title={exhibits.governorWife.title}
+                subtitle={exhibits.governorWife.subtitle}
+                description={exhibits.governorWife.description}
+                visible={activePanel === 'governorWife'}
+                onClose={() => setActivePanel(null)}
               />
             </div>
-            {/* 合并后全图 */}
-            <img
-              ref={g2MergeFullRef}
-              src="/picture/chap1/段文杰复原临摹莫高窟 130窟 都督夫人礼佛图.png"
-              alt="都督夫人礼佛图"
-              style={{ position: 'absolute', height: '90vh', width: 'auto', opacity: 0 }}
-            />
-            <Hotspot
-              ref={g2MergeHotspotRef}
-              x={50}
-              y={50}
-              active={activePanel === 'governorWife'}
-              onClick={() => togglePanel('governorWife')}
-            />
-            <ExhibitPanel
-              title={exhibits.governorWife.title}
-              subtitle={exhibits.governorWife.subtitle}
-              description={exhibits.governorWife.description}
-              visible={activePanel === 'governorWife'}
-              onClose={() => setActivePanel(null)}
-            />
-          </div>
-        </div>
 
-        {/* 展项：五代 第98窟 于阗国王李圣天供养像（长卷上滑） */}
-        <div ref={g2KingSceneRef} className={styles.scene}>
-          <div className={styles.twoPageScene}>
-            <img
-              ref={g2KingFigureRef}
-              src="/picture/chap1/第98窟 于阗国王李圣天供养像.png"
-              alt="第98窟 于阗国王李圣天供养像"
-              className={styles.twoPageFigure}
-              style={{ height: '180vh', width: 'auto' }}
-            />
-            <Hotspot
-              ref={g2KingHotspotRef}
-              x={70}
-              y={25}
-              active={activePanel === 'kingKhotan'}
-              onClick={() => togglePanel('kingKhotan')}
-            />
-            <ExhibitPanel
-              title={exhibits.kingKhotan.title}
-              description={exhibits.kingKhotan.description}
-              visible={activePanel === 'kingKhotan'}
-              onClose={() => setActivePanel(null)}
-            />
-            <div className={styles.cloud} />
-            <div className={styles.cloud} />
-          </div>
-        </div>
+            {/* 第 2 屏：五代 第98窟 于阗国王李圣天供养像 */}
+            <div className={styles.carouselPanel}>
+              <div ref={g2KingFigureRef} className={styles.figureGroup}>
+                <img
+                  src="/picture/chap1/第98窟 于阗国王李圣天供养像.png"
+                  alt="第98窟 于阗国王李圣天供养像"
+                  style={{ height: '80vh', width: 'auto', maxWidth: '60vw' }}
+                />
+                <p className={styles.figureText}>
+                  敦煌供养人像中还会出现外族君主的形象，这类外姓君主供养像的存在，说明敦煌作为丝路枢纽，其壁画体系所反映的不仅是汉地佛教信仰圈内部的供养行为，也包含了与当时周边政权之间深层的政治联系与文化交流。
+                </p>
+              </div>
+              <Hotspot
+                ref={g2KingHotspotRef}
+                x={40}
+                y={20}
+                active={activePanel === 'kingKhotan'}
+                onClick={() => togglePanel('kingKhotan')}
+              />
+              <ExhibitPanel
+                title={exhibits.kingKhotan.title}
+                description={exhibits.kingKhotan.description}
+                visible={activePanel === 'kingKhotan'}
+                onClose={() => setActivePanel(null)}
+              />
+              <div className={styles.cloud} />
+              <div className={styles.cloud} />
+            </div>
 
-        {/* 展项：五代 第98窟 五代女供养人（欧阳琳复原画，长卷上滑） */}
-        <div ref={g2WomanSceneRef} className={styles.scene} style={{ marginTop: '80vh' }}>
-          <div className={styles.twoPageScene}>
-            <img
-              ref={g2WomanFigureRef}
-              src="/picture/chap1/第98窟 五代女供养人欧阳琳1992年复原画.png"
-              alt="第98窟 五代女供养人 (欧阳琳复原画)"
-              className={styles.twoPageFigure}
-              style={{ height: '180vh', width: 'auto', maxWidth: '50vw' }}
-            />
-            <Hotspot
-              ref={g2WomanHotspotRef}
-              x={30}
-              y={30}
-              active={activePanel === 'fiveDynastiesWoman'}
-              onClick={() => togglePanel('fiveDynastiesWoman')}
-            />
-            <ExhibitPanel
-              title={exhibits.fiveDynastiesWoman.title}
-              subtitle={exhibits.fiveDynastiesWoman.subtitle}
-              description={exhibits.fiveDynastiesWoman.description}
-              visible={activePanel === 'fiveDynastiesWoman'}
-              onClose={() => setActivePanel(null)}
-            />
-            <div className={styles.cloud} />
+            {/* 第 3 屏：五代 第98窟 五代女供养人（欧阳琳复原画） */}
+            <div className={styles.carouselPanel}>
+              <img
+                ref={g2WomanFigureRef}
+                src="/picture/chap1/第98窟 五代女供养人欧阳琳1992年复原画.png"
+                alt="第98窟 五代女供养人 (欧阳琳复原画)"
+                style={{ height: '80vh', width: 'auto', maxWidth: '50vw' }}
+              />
+              <Hotspot
+                ref={g2WomanHotspotRef}
+                x={35}
+                y={35}
+                active={activePanel === 'fiveDynastiesWoman'}
+                onClick={() => togglePanel('fiveDynastiesWoman')}
+              />
+              <ExhibitPanel
+                title={exhibits.fiveDynastiesWoman.title}
+                subtitle={exhibits.fiveDynastiesWoman.subtitle}
+                description={exhibits.fiveDynastiesWoman.description}
+                visible={activePanel === 'fiveDynastiesWoman'}
+                onClose={() => setActivePanel(null)}
+              />
+              <div className={styles.cloud} />
+            </div>
           </div>
         </div>
 
         {/* 展项：隋代 第62窟 平民供养人 + 晚唐 第107窟 奴隶供养人（并列展示） */}
         <div ref={g2DualSceneRef} className={styles.dualLayout}>
+          <p className={styles.transitionCaption}>
+            平民甚至奴婢形象多列于贵族供养人行列之末，画幅与位置远不及贵族显赫。
+          </p>
           <div className={styles.dualItem}>
             <img
               src="/picture/chap1/第62窟东壁下部 平民供养人及牛车.png"
@@ -515,7 +483,7 @@ export default function Chapter1() {
             />
             <Hotspot
               x={50}
-              y={45}
+              y={30}
               active={activePanel === 'commoner'}
               onClick={() => togglePanel('commoner')}
             />

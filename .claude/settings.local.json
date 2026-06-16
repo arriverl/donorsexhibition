@@ -4,7 +4,15 @@
       "Bash(npm run *)",
       "Bash(npm install *)",
       "Bash(curl -s http://localhost:5174)",
-      "Bash(npx eslint *)"
+      "Bash(npx eslint *)",
+      "Bash(ls -la public/picture/hero.jpg)",
+      "Bash(file public/picture/hero.jpg)",
+      "Bash(npx vite *)",
+      "Bash(cat src/sections/index.js)",
+      "Bash(cat src/sections/index.jsx)",
+      "Bash(python -c 'from PIL import Image; import os *)",
+      "Bash(python -c ' *)",
+      "Bash(python -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('scripts',{}\\),ensure_ascii=False\\)\\)\")"
     ]
   }
 }
