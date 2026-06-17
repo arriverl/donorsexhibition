@@ -284,6 +284,21 @@
   justify-content: center;
 }
 
+/* 包含实际图片的占位符 - 移除背景和边框 */
+.exhibit2WithImage {
+  background: transparent !important;
+  border: none !important;
+}
+
+.exhibit2Image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  border-radius: 8px;
+}
+
 .exhibit2ImageText {
   font-size: 1.2rem;
   color: rgba(26, 26, 26, 0.5);

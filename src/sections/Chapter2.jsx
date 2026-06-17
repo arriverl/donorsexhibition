@@ -29,6 +29,11 @@ const exhibits = {
     subtitle: '河西节度使张公夫人',
     description: '题记内容为"河西节度使张公夫人后敕授武威郡君太夫人阴氏一心供养"，位于主室北壁下部，西起第十二身供养人像旁。"河西节度使张公"所指的对象，学界主要有两种观点：一说为张淮深的夫人，另一说为张淮鼎的夫人。但可以确定的是，题记中的"太夫人阴氏"是一位嫁入归义军张氏家族的阴家女性。',
   },
+  caoLady: {
+    title: '曹氏家族女供养人',
+    subtitle: '五代曹氏归义军时期 第61窟',
+    description: '从左往右依次为回鹘天公主、甘州回鹘天公主、于阗皇后、广平宋氏，回鹘天公主与曹议金一女"出适阴氏"，由此引出曹氏归义军和阴氏家族。',
+  },
 }
 
 export default function Chapter2() {
@@ -47,6 +52,8 @@ export default function Chapter2() {
   const yinLadyRef = useRef(null)
   const yinLadySectionRef = useRef(null)
   const yinLadyHotspotRef = useRef(null)
+  const caoLadyContainerRef = useRef(null)
+  const caoLadyDocRef = useRef(null)
   const [activePanel, setActivePanel] = useState(null)
 
   const togglePanel = (id) => {
@@ -261,6 +268,52 @@ export default function Chapter2() {
         }
       }
 
+      // 曹氏家族女供养人组渐入动画
+      if (caoLadyContainerRef.current) {
+        gsap.fromTo(
+          caoLadyContainerRef.current,
+          {
+            opacity: 0,
+            y: 60,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: caoLadyContainerRef.current,
+              start: 'top 85%',
+              end: 'top 50%',
+              scrub: 1,
+            },
+          }
+        )
+      }
+
+      // 左侧文书与文本渐入动画
+      if (caoLadyDocRef.current) {
+        gsap.fromTo(
+          caoLadyDocRef.current,
+          {
+            opacity: 0,
+            x: -60,
+          },
+          {
+            opacity: 1,
+            x: 0,
+            duration: 1.2,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: caoLadyDocRef.current,
+              start: 'top 85%',
+              end: 'top 50%',
+              scrub: 1,
+            },
+          }
+        )
+      }
+
     }, openingSceneRef)
 
     return () => ctx.revert()
@@ -410,6 +463,90 @@ export default function Chapter2() {
           visible={activePanel === 'yinLady'}
           onClose={() => setActivePanel(null)}
         />
+      </div>
+
+      {/* 曹氏家族女供养人组 - 在阴氏郡君太夫人展项下方 */}
+      <div className="section section--chapter-2 relative" style={{ minHeight: '100vh', height: '100vh', overflow: 'hidden', padding: '0 var(--section-padding-x)' }}>
+        {/* 左侧：阴家小娘子文书（靠上）+ 文本（靠下） */}
+        <div
+          ref={caoLadyDocRef}
+          style={{
+            position: 'absolute',
+            top: '8vh',
+            left: '5vw',
+            width: '38vw',
+            maxWidth: '640px',
+            zIndex: 10,
+          }}
+        >
+          <img
+            src="/picture/chap2/阴家小娘子文书.png"
+            alt="阴家小娘子文书"
+            style={{
+              width: '100%',
+              height: 'auto',
+              maxHeight: '46vh',
+              objectFit: 'contain',
+              display: 'block',
+              filter: 'drop-shadow(0 10px 30px rgba(0,0,0,0.2))'
+            }}
+          />
+          <div style={{ marginTop: '3vh', maxWidth: '38vw' }}>
+            <p style={{ fontSize: '1.05rem', fontWeight: 600, color: 'var(--text-primary, #2a2a2a)', lineHeight: 1.7, marginBottom: '0.8em' }}>
+              五代曹氏归义军时期 S.4536 《为故小娘子小祥追福文》（斯坦敦煌手稿）
+            </p>
+            <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary, #555)', lineHeight: 1.9, marginBottom: '0.8em' }}>
+              英藏S.4536号敦煌汉文斋愿文书，同卷兼抄造幡文、造窟功德记三篇文书，本篇为佛教斋会追福范文实录。
+            </p>
+            <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary, #555)', lineHeight: 1.9 }}>
+              愿文存关键题记："于孫承作河西之舊石不待勝福欲用涯巖陰家小娘"，文中 "故父大王、国母圣天公主" 分别指代归义军节度使曹议金、回鹘天公主（曹议金回鹘正妻）；这位亡故小娘子是曹议金与回鹘天公主的亲生女儿，成年嫁入敦煌望族阴氏，故称阴家小娘，周年亡故后，曹氏亲族举办佛事斋醮、书写此愿文荐亡祈福。
+            </p>
+          </div>
+        </div>
+
+        {/* 右侧：曹氏家族女供养人图 */}
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            right: '5vw',
+            transform: 'translateY(-50%)',
+            width: '45vw',
+            maxWidth: '760px',
+            zIndex: 10,
+          }}
+        >
+          <div ref={caoLadyContainerRef} style={{ position: 'relative', width: '100%' }}>
+            <img
+              src="/picture/chap2/61窟女供养人.png"
+              alt="曹氏家族女供养人"
+              style={{
+                width: '100%',
+                height: 'auto',
+                maxHeight: '85vh',
+                objectFit: 'contain',
+                display: 'block',
+                filter: 'drop-shadow(0 10px 30px rgba(0,0,0,0.2))'
+              }}
+            />
+            {/* 交互点 */}
+            <Hotspot
+              x={10}
+              y={20}
+              active={activePanel === 'caoLady'}
+              onClick={() => togglePanel('caoLady')}
+            />
+
+            {/* 曹氏家族女供养人展品面板 */}
+            <ExhibitPanel
+              title={exhibits.caoLady.title}
+              subtitle={exhibits.caoLady.subtitle}
+              description={exhibits.caoLady.description}
+              visible={activePanel === 'caoLady'}
+              onClose={() => setActivePanel(null)}
+            />
+          </div>
+        </div>
       </div>
     </section>
   )

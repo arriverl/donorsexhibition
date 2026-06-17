@@ -786,8 +786,12 @@ export default function Chapter3() {
             </div>
           </div>
           <div ref={exhibit2ImageRef} className={styles.exhibit2Right}>
-            <div className={styles.exhibit2ImagePlaceholder}>
-              <span className={styles.exhibit2ImageText}>图片占位符</span>
+            <div className={`${styles.exhibit2ImagePlaceholder} ${styles.exhibit2WithImage}`}>
+              <img
+                src="/picture/chap3/431窟南壁壁画.jpg"
+                alt="431窟南壁壁画"
+                className={styles.exhibit2Image}
+              />
             </div>
           </div>
         </div>
