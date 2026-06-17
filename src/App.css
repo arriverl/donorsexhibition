@@ -101,3 +101,28 @@ body {
   position: relative;
   background: var(--color-bg);
 }
+
+/* 展品交互点（Hotspot 组件）全局脉冲环 —— 与第一单元保持一致 */
+.hotspot__pulse {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid rgba(26, 26, 26, 0.5);
+  animation: hotspotPulse 2s ease-in-out infinite;
+}
+
+.hotspot--active .hotspot__pulse {
+  animation: none;
+  opacity: 0;
+}
+
+@keyframes hotspotPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}

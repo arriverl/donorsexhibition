@@ -272,7 +272,7 @@ export default function Chapter2() {
       <div ref={openingSceneRef} className={styles.openingScene}>
         <div className={styles.portraits}>
           <div ref={portraitLeftRef} className={`${styles.portrait} ${styles.portraitLeft}`}>
-            <img ref={leftPortraitImgRef} src="/picture/chap2/史崇姬像.png" alt="史崇姬像" />
+            <img ref={leftPortraitImgRef} src="/picture/chap2/史崇姬像.png" alt="史崇姬像" style={{ width: '580px' }} />
             <div className={styles.hotspotWrapper}>
               <Hotspot
                 ref={leftHotspotRef}
@@ -284,7 +284,7 @@ export default function Chapter2() {
             </div>
           </div>
           <div ref={portraitRightRef} className={`${styles.portrait} ${styles.portraitRight}`}>
-            <img ref={rightPortraitImgRef} src="/picture/chap2/阴安归像.png" alt="阴安归像" />
+            <img ref={rightPortraitImgRef} src="/picture/chap2/阴安归像.png" alt="阴安归像" style={{ width: '500px' }} />
             <div className={styles.hotspotWrapper}>
               <Hotspot
                 ref={rightHotspotRef}
@@ -298,7 +298,7 @@ export default function Chapter2() {
         </div>
 
         <div ref={titleOverlayRef} className={styles.titleOverlay}>
-          <h2 className={styles.chapterTitle}>族姻交汇</h2>
+          <img className={styles.chapterTitle} src="/picture/chap2/单元标题2.png" alt="族姻交汇" style={{ height: '40vh', width: 'auto' }} />
           <p className={styles.chapterSubtitle}>通丝路、连族群、结姻亲、融风尚——五百年间，敦煌阴氏以联姻织就文明纽带。<br />本单元以供养人画像为引，追溯阴氏与粟特、世家的通婚脉络，并从中窥见丝路族群交融的日常与深度。</p>
         </div>
 
@@ -356,24 +356,13 @@ export default function Chapter2() {
                 filter: 'drop-shadow(0 10px 30px rgba(0,0,0,0.15))'
               }}
             />
-            {/* 红色交互点 */}
-            <div
+            {/* 交互点 */}
+            <Hotspot
               ref={zhangHotspotRef}
+              x={15}
+              y={20}
+              active={activePanel === 'zhangYichao'}
               onClick={() => togglePanel('zhangYichao')}
-              style={{
-                position: 'absolute',
-                left: '15%',
-                top: '20%',
-                width: '32px',
-                height: '32px',
-                backgroundColor: '#DC2626',
-                borderRadius: '50%',
-                border: '4px solid #FCA5A5',
-                boxShadow: '0 0 15px rgba(220,38,38,0.8)',
-                cursor: 'pointer',
-                animation: 'pulse 2s infinite',
-                zIndex: 30
-              }}
             />
 
             {/* 张议潮展品面板 */}
@@ -405,22 +394,14 @@ export default function Chapter2() {
           }}
         />
         {/* 交互点 - 在图像右上方，位置在动画结束后动态设置 */}
-        <div
-          ref={yinLadyHotspotRef}
-          onClick={() => togglePanel('yinLady')}
-          style={{
-            position: 'absolute',
-            width: '32px',
-            height: '32px',
-            backgroundColor: '#DC2626',
-            borderRadius: '50%',
-            border: '4px solid #FCA5A5',
-            boxShadow: '0 0 15px rgba(220,38,38,0.8)',
-            cursor: 'pointer',
-            animation: 'pulse 2s infinite',
-            zIndex: 30
-          }}
-        />
+        <div ref={yinLadyHotspotRef} style={{ position: 'absolute', zIndex: 30 }}>
+          <Hotspot
+            x={0}
+            y={0}
+            active={activePanel === 'yinLady'}
+            onClick={() => togglePanel('yinLady')}
+          />
+        </div>
         {/* 阴氏郡君展品面板 */}
         <ExhibitPanel
           title={exhibits.yinLady.title}

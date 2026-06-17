@@ -385,6 +385,30 @@
   overflow: hidden;
 }
 
+/* 发愿文舞台：横向介绍文字与竖向发愿文同处一层，便于重新排列组合 */
+.vowStage {
+  position: relative;
+  width: 100%;
+}
+
+.vowIntro {
+  position: absolute;
+  top: 6vh;
+  left: 0;
+  right: 0;
+  max-width: 40em;
+  margin: 0 auto;
+  padding: 0 6vw;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.4vw, 1.3rem);
+  line-height: 2;
+  letter-spacing: 0.04em;
+  color: var(--color-text);
+  text-align: center;
+  z-index: 2;
+  pointer-events: none;
+}
+
 .characterCards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));

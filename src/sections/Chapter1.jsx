@@ -61,6 +61,20 @@ const exhibits = {
   },
 }
 
+// 第三组：横向介绍文字（先出现）与竖向发愿文（重新排列组合后出现）
+const introSentences = [
+  '西魏时期，莫高窟第285窟留下了现存有最早的纪年题记，这也是莫高窟营建史上具有标志意义的一刻。',
+  '在这批题记所记录的众多供养人之中，阴氏的名字第一次被刻入敦煌的石壁，成为这一家族与莫高窟营建活动发生关联的最早实证。',
+]
+const vowLines = [
+  '夫至极阒旷正为尘罗所约圣遁归趣',
+  '非积垒何能济拔是以佛弟子比丘辯化仰',
+  '为七世父母所生父母敬造迎叶佛一区并二菩',
+  '萨因斯微福愿亡者神游净土永离三途现',
+  '在居眷位太安吉普及蠕动之类速登常乐',
+  '大代大魏大统四年岁次戊午八月中旬造',
+]
+
 export default function Chapter1() {
   const [activePanel, setActivePanel] = useState(null)
   const chapterRef = useRef(null)
@@ -99,6 +113,7 @@ export default function Chapter1() {
   // Group 3 refs
   const g3SectionRef = useRef(null)
   const g3VowRef = useRef(null)
+  const g3IntroRef = useRef(null)
   const g3CardsRef = useRef(null)
   const g3VowImgRef = useRef(null)
   const g3DonorImgRef = useRef(null)
@@ -214,21 +229,46 @@ export default function Chapter1() {
         }
       )
 
-      // === Group 3: 文字收束到发愿文图片 ===
+      // === Group 3: 横向介绍文字 → 重新排列组合为竖向发愿文 → 飞入题记图片 ===
       gsap.set(g3VowImgRef.current, { opacity: 0, y: 80 })
       gsap.set(g3DonorImgRef.current, { opacity: 0, y: 80 })
       gsap.set([g3Hotspot1Ref.current, g3Hotspot2Ref.current, g3Hotspot3Ref.current], { opacity: 0 })
+
+      const introChars = g3IntroRef.current.querySelectorAll('.introChar')
+      const vowChars = g3VowRef.current.querySelectorAll('.vowChar')
+      gsap.set(introChars, { opacity: 0, y: 20 })
+      gsap.set(vowChars, { opacity: 0 })
+
       const g3tl = gsap.timeline({
         scrollTrigger: {
           trigger: g3SectionRef.current,
           start: 'top top',
-          end: '+=300%',
+          end: '+=500%',
           pin: true,
           scrub: 1,
         },
       })
       g3tl
-        .fromTo(g3VowRef.current, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.4 })
+        // 1. 横向介绍文字逐字浮现
+        .fromTo(introChars, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.015 })
+        .to({}, { duration: 0.4 }) // 短暂停留
+        // 2. 重新排列组合：横向文字散开 → 竖向发愿文聚拢
+        .to(introChars, {
+          opacity: 0,
+          x: () => gsap.utils.random(-120, 120),
+          y: () => gsap.utils.random(-120, 120),
+          rotation: () => gsap.utils.random(-120, 120),
+          scale: 0.5,
+          duration: 0.7,
+          stagger: { each: 0.01, from: 'random' },
+        }, '+=0.2')
+        .fromTo(vowChars,
+          { opacity: 0, x: () => gsap.utils.random(-120, 120), y: () => gsap.utils.random(-120, 120), rotation: () => gsap.utils.random(-120, 120), scale: 0.5 },
+          { opacity: 1, x: 0, y: 0, rotation: 0, scale: 1, duration: 0.7, stagger: { each: 0.01, from: 'random' } },
+          '<0.1'
+        )
+        .to({}, { duration: 0.3 }) // 发愿文停留
+        // 3. 既有流程：发愿文飞入题记图片位置
         .to(g3DonorImgRef.current, { opacity: 1, y: 0, duration: 0.6 }, '>')
         .to(g3VowRef.current, {
           x: () => g3VowImgRef.current.getBoundingClientRect().left - g3VowRef.current.getBoundingClientRect().left,
@@ -520,14 +560,27 @@ export default function Chapter1() {
       <div className={styles.group}>
         {/* 展项：敦煌阴氏285窟发愿文 + 人物卡片（史崇姬、比丘辯化、阴安归） */}
         <div ref={g3SectionRef} className={styles.inscriptionSection}>
-          <blockquote ref={g3VowRef} className={styles.vowText}>
-            夫至极阒旷正为尘罗所约圣遁归趣
-            非积垒何能济拔是以佛弟子比丘辯化仰
-            为七世父母所生父母敬造迎叶佛一区并二菩
-            萨因斯微福愿亡者神游净土永离三途现
-            在居眷位太安吉普及蠕动之类速登常乐
-            大代大魏大统四年岁次戊午八月中旬造
-          </blockquote>
+          <div className={styles.vowStage}>
+            <p ref={g3IntroRef} className={styles.vowIntro}>
+              {introSentences.map((s, si) => (
+                <span key={si} style={{ display: 'block', marginBottom: '1em' }}>
+                  {s.split('').map((ch, ci) => (
+                    <span key={ci} className="introChar" style={{ display: 'inline-block' }}>{ch}</span>
+                  ))}
+                </span>
+              ))}
+            </p>
+            <blockquote ref={g3VowRef} className={styles.vowText}>
+              {vowLines.map((line, li) => (
+                <span key={li} style={{ display: 'inline' }}>
+                  {line.split('').map((ch, ci) => (
+                    <span key={ci} className="vowChar" style={{ display: 'inline-block' }}>{ch}</span>
+                  ))}
+                  {li < vowLines.length - 1 && <br />}
+                </span>
+              ))}
+            </blockquote>
+          </div>
           <div ref={g3DonorImgRef} style={{ position: 'relative', width: '90vw', marginLeft: 'calc(-45vw + 50%)', overflow: 'visible' }}>
             <img
               src="/picture/chap1/285窟北壁第二铺供养人 .png"

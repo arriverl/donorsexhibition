@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import ExhibitPanel from '../components/ExhibitPanel'
+import Hotspot from '../components/Hotspot'
 import ModelViewer from '../components/ModelViewer'
 import styles from './Chapter3.module.css'
 
@@ -83,7 +84,15 @@ export default function Chapter3() {
   const exhibit13Ref = useRef(null)
   const exhibit13LeftHotspotRef = useRef(null)
   const [activePanel, setActivePanel] = useState(null)
+  const [activeTuJing, setActiveTuJing] = useState(0)
   const [particles, setParticles] = useState([])
+
+  // 展项4 - 图经叠层查看器
+  const tuJingImages = [
+    '/picture/chap3/图经1.png',
+    '/picture/chap3/图经2.png',
+    '/picture/chap3/图经3.png',
+  ]
 
   const togglePanel = (id) => {
     setActivePanel((prev) => (prev === id ? null : id))
@@ -651,7 +660,11 @@ export default function Chapter3() {
       <div ref={openingSceneRef} className={styles.openingScene}>
         {/* 左上角标题 */}
         <div ref={titleRef} className={styles.titleSection}>
-          <h2 className={styles.chapterTitle}>青云之势</h2>
+          <img
+            className={styles.chapterTitle}
+            src="/picture/chap3/单元标题3.png"
+            alt="青云之势"
+          />
         </div>
 
         {/* 河流效果 */}
@@ -744,11 +757,17 @@ export default function Chapter3() {
             </div>
           </div>
           <div ref={exhibit1ImageRef} className={styles.exhibit1Right}>
-            <div className={styles.exhibit1ImagePlaceholder}>
-              <span className={styles.exhibit1ImageText}>图片占位符</span>
-              <div
+            <div className={`${styles.exhibit1ImagePlaceholder} ${styles.exhibit1WithImage}`}>
+              <img
+                src="/picture/chap3/宝雨经.jpg"
+                alt="宝雨经"
+                className={styles.exhibit1Image}
+              />
+              <Hotspot
+                x={50}
+                y={50}
+                active={activePanel === 'baoYuJing'}
                 onClick={() => togglePanel('baoYuJing')}
-                className={styles.exhibit1Hotspot}
               />
             </div>
           </div>
@@ -762,7 +781,7 @@ export default function Chapter3() {
             <div className={styles.exhibit2Content}>
               <h3 className={styles.exhibit2Title}>431窟</h3>
               <p className={styles.exhibit2Text}>
-                展项说明文本占位符
+                431窟是阴氏家族在前人基础上在唐代重修的洞窟，其将洞窟地面下挖，在中心塔柱柱座以及洞窟四壁绘制了壁画。南壁绘有"九品往生"，其中下三品画面生动表现了善导大师的净土思想与凡夫论。这建立了敦煌最早往生西方净土的道场，充分彰显出阴氏家族敏锐的宗教审美与艺术认知。
               </p>
             </div>
           </div>
@@ -792,8 +811,51 @@ export default function Chapter3() {
       <div ref={exhibit4Ref} className={styles.exhibit4}>
         <div className={styles.exhibit4Content}>
           <div ref={exhibit4Section1Ref} className={styles.exhibit4Top}>
-            <div className={styles.exhibit4SectionPlaceholder}>
-              <span className={styles.exhibit4SectionText}>第一部分占位符</span>
+            <div className={styles.tuJingViewer}>
+              {tuJingImages.map((src, i) => {
+                const offset = i - activeTuJing
+                return (
+                  <img
+                    key={src}
+                    src={src}
+                    alt={`图经 ${i + 1}`}
+                    className={styles.tuJingCard}
+                    style={{
+                      transform: `translate(${offset * 24}px, ${Math.abs(offset) * 14}px) rotate(${offset * 2.6}deg) scale(${1 - Math.abs(offset) * 0.05})`,
+                      opacity: offset === 0 ? 1 : 0.4,
+                      zIndex: 10 - Math.abs(offset),
+                      pointerEvents: offset === 0 ? 'auto' : 'none',
+                    }}
+                  />
+                )
+              })}
+
+              <button
+                type="button"
+                className={`${styles.tuJingNav} ${styles.tuJingNavPrev}`}
+                onClick={() => setActiveTuJing((p) => Math.max(0, p - 1))}
+                disabled={activeTuJing === 0}
+                aria-label="上一张图经"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M15 6 L9 12 L15 18" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                className={`${styles.tuJingNav} ${styles.tuJingNavNext}`}
+                onClick={() => setActiveTuJing((p) => Math.min(tuJingImages.length - 1, p + 1))}
+                disabled={activeTuJing === tuJingImages.length - 1}
+                aria-label="下一张图经"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 6 L15 12 L9 18" />
+                </svg>
+              </button>
+
+              <div className={styles.tuJingCounter}>
+                {String(activeTuJing + 1).padStart(2, '0')} / {String(tuJingImages.length).padStart(2, '0')}
+              </div>
             </div>
           </div>
           <div className={styles.exhibit4Bottom}>
@@ -856,21 +918,20 @@ export default function Chapter3() {
           </div>
         </div>
         {/* 交互点 */}
-        <div ref={exhibit6HotspotRef} className={styles.exhibit6Hotspot}>
-          <div
-            className={styles.exhibit6HotspotButton}
-            onClick={() => togglePanel('baoEnJunQin')}
-          />
-        </div>
+        <Hotspot
+          ref={exhibit6HotspotRef}
+          x={25}
+          y={85}
+          active={activePanel === 'baoEnJunQin'}
+          onClick={() => togglePanel('baoEnJunQin')}
+        />
       </div>
 
       {/* 展项7 - 新展项 */}
       <div ref={exhibit7Ref} className={styles.exhibit7}>
         {/* 左上角交互点和文本 */}
         <div className={styles.exhibit7TopLeftContainer}>
-          <div ref={exhibit7TopLeftHotspotRef} className={styles.exhibit7Hotspot}>
-            <div className={styles.exhibit7HotspotButton} />
-          </div>
+          <Hotspot ref={exhibit7TopLeftHotspotRef} inline />
           <div ref={exhibit7TopLeftTextRef} className={styles.exhibit7TextPlaceholder}>
             文本占位符
           </div>
@@ -896,9 +957,7 @@ export default function Chapter3() {
         </div>
 
         {/* 右下角交互点 */}
-        <div ref={exhibit7BottomRightHotspotRef} className={styles.exhibit7BottomRightHotspot}>
-          <div className={styles.exhibit7HotspotButton} />
-        </div>
+        <Hotspot ref={exhibit7BottomRightHotspotRef} x={95} y={92} />
       </div>
 
       {/* 展项8 - 竖版文字 */}
@@ -971,9 +1030,11 @@ export default function Chapter3() {
             alt="张议潮出行图"
             className={styles.exhibit11Image}
           />
-          <div
+          <Hotspot
             ref={exhibit11RightHotspotRef}
-            className={styles.exhibit11RightHotspot}
+            x={85}
+            y={85}
+            active={activePanel === 'zhangYiChaoTravel'}
             onClick={() => togglePanel('zhangYiChaoTravel')}
           />
         </div>
@@ -998,9 +1059,11 @@ export default function Chapter3() {
                 className={styles.exhibit9ActualImage}
               />
             </div>
-            <div
+            <Hotspot
               ref={exhibit12LeftHotspotRef}
-              className={styles.exhibit12Hotspot}
+              x={15}
+              y={50}
+              active={activePanel === 'zhangYiChao'}
               onClick={() => togglePanel('zhangYiChao')}
             />
           </div>
@@ -1012,9 +1075,11 @@ export default function Chapter3() {
                 className={styles.exhibit9ActualImage}
               />
             </div>
-            <div
+            <Hotspot
               ref={exhibit12RightHotspotRef}
-              className={styles.exhibit12RightHotspot}
+              x={85}
+              y={50}
+              active={activePanel === 'zhangYiChaoWife'}
               onClick={() => togglePanel('zhangYiChaoWife')}
             />
           </div>
@@ -1045,9 +1110,11 @@ export default function Chapter3() {
               alt="安国寺尼智慧性供养像"
               className={styles.exhibit9ActualImage}
             />
-            <div
+            <Hotspot
               ref={exhibit13LeftHotspotRef}
-              className={styles.exhibit13Hotspot}
+              x={35}
+              y={15}
+              active={activePanel === 'anGuoTempleNun'}
               onClick={() => togglePanel('anGuoTempleNun')}
             />
           </div>

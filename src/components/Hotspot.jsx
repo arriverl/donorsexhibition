@@ -1,7 +1,7 @@
 import { forwardRef } from 'react'
 
 const Hotspot = forwardRef(function Hotspot(
-  { x = 50, y = 50, active = false, onClick, className = '' },
+  { x = 50, y = 50, active = false, onClick, className = '', inline = false },
   ref
 ) {
   return (
@@ -11,10 +11,10 @@ const Hotspot = forwardRef(function Hotspot(
       onClick={onClick}
       aria-label="查看展品信息"
       style={{
-        position: 'absolute',
-        left: `${x}%`,
-        top: `${y}%`,
-        transform: 'translate(-50%, -50%)',
+        position: inline ? 'relative' : 'absolute',
+        left: inline ? 'auto' : `${x}%`,
+        top: inline ? 'auto' : `${y}%`,
+        transform: inline ? 'none' : 'translate(-50%, -50%)',
         width: '48px',
         height: '48px',
         borderRadius: '50%',
