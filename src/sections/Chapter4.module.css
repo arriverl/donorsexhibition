@@ -9,87 +9,1027 @@
   color: #1a1a1a !important;
 }
 
+/* 胶片颗粒纹理 overlay */
+.chapter4::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+  mix-blend-mode: overlay;
+}
+
 /* 开场场景 */
 .openingScene {
   position: relative;
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-top: 4rem;
+  padding-bottom: 6rem;
 }
 
 /* 标题图片容器 */
 .titleImageContainer {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1;
+  max-width: 85vw;
+  margin: 0 auto 4rem auto;
+  z-index: 10;
 }
 
 .titleImage {
+  width: 100%;
+  height: auto;
+  max-height: 70vh;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  filter: drop-shadow(0 20px 60px rgba(26, 26, 26, 0.08));
+}
+
+/* 说明文本 */
+.descriptionSection {
+  position: relative;
+  z-index: 20;
+  text-align: center;
+  max-width: 75vw;
+  margin: 0 auto;
+}
+
+.descriptionText {
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  color: var(--color-text-muted, #4a4040);
+  font-weight: 400;
+  line-height: 2;
+  letter-spacing: 0.04em;
+  white-space: pre-wrap;
+}
+
+/* 藏经洞进入页面图片容器 */
+.openingPageContainer {
+  position: relative;
+  z-index: 15;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  margin-top: 4rem;
+}
+
+.openingPageImage {
+  width: 1235.39px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 15px 40px rgba(26, 26, 26, 0.06));
+}
+
+/* 展品组信息容器 */
+.exhibitInfoContainer {
+  position: absolute;
+  right: 6%;
+  top: 8%;
+  width: 26%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.exhibitTitle {
+  font-family: var(--font-display, 'Noto Serif SC', serif);
+  font-size: clamp(2rem, 3.5vw, 2.6rem);
+  font-weight: 600;
+  color: var(--color-text, #1a1a1a);
+  letter-spacing: 0.12em;
+  margin: 0;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.exhibitDescription {
+  font-size: 31.6px;
+  color: var(--color-text-muted, #4a4040);
+  font-weight: 400;
+  line-height: 2;
+  letter-spacing: 0.06em;
+  margin: 0;
+  text-align: justify;
+}
+
+/* 新增展项页面 */
+.newExhibitPage {
+  position: relative;
+  width: 100%;
+  min-height: 120vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 2rem;
+  margin-bottom: 5rem;
+  overflow: hidden;
+}
+
+/* 左侧图片容器 */
+.leftImageContainer {
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  z-index: 5;
+}
+
+.leftImage {
+  width: 42vw;
+  max-width: 550px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 50px rgba(26, 26, 26, 0.07));
+}
+
+/* 文本区域 */
+.textArea {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 4rem;
+  z-index: 10;
+  padding-left: 15%;
+}
+
+/* 竖向文本：藏经洞里 */
+.verticalText {
+  font-family: var(--font-display, 'Noto Serif SC', serif);
+  font-size: clamp(3.5rem, 6vw, 4.5rem);
+  font-weight: 600;
+  color: var(--color-text, #1a1a1a);
+  letter-spacing: 0.18em;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  height: clamp(220px, 35vw, 400px);
+  position: relative;
+  filter: drop-shadow(0 2px 8px rgba(26, 26, 26, 0.06));
+}
+
+/* "洞里"左边的小图片 */
+.dongLeftImage {
+  position: absolute;
+  left: -8vw;
+  bottom: 12%;
+  width: 30vw;
+  max-width: 25px;
+  height: auto;
+  object-fit: contain;
+  opacity: 0;
+}
+
+/* 问号文本容器 */
+.questionContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  margin-top: 0;
+  position: relative;
+}
+
+/* 横向问号文本 */
+.questionText {
+  font-family: var(--font-display, 'Noto Serif SC', serif);
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-weight: 500;
+  color: var(--color-text, #1a1a1a);
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
+/* 交互点 */
+.interactionDot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-left: 1.5rem;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.interactionDot::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #c9a227, #d4af37);
+  border-radius: 50%;
+  animation: pulse 2.5s cubic-bezier(0.32, 0.72, 0, 1) infinite;
+}
+
+.dotPulse {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, #c9a227, transparent);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 0.5;
+  }
+}
+
+.interactionDot:hover::before {
+  transform: scale(1.25);
+  box-shadow: 0 0 30px rgba(201, 162, 39, 0.4);
+}
+
+/* 宝藏列表 */
+.treasuresList {
+  position: absolute;
+  left: 0;
+  top: 120%;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 3rem 4rem;
+  border-radius: 1.25rem;
+  min-width: 450px;
+  max-width: 650px;
+  animation: fadeInUp 1.2s cubic-bezier(0.32, 0.72, 0, 1);
+  box-shadow:
+    0 15px 50px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  z-index: 100;
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  overflow: hidden;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    max-height: 700px;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.treasureTitle {
+  font-family: var(--font-display, 'Noto Serif SC', serif);
+  font-size: clamp(1.4rem, 2.2vw, 1.8rem);
+  font-weight: 600;
+  color: var(--color-text, #1a1a1a);
+  letter-spacing: 0.1em;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.treasureItems {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.treasureItems li {
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  color: var(--color-text-muted, #4a4040);
+  font-weight: 400;
+  line-height: 2.4;
+  letter-spacing: 0.06em;
+  padding: 0.75rem 0;
+  border-bottom: 1px dashed rgba(74, 64, 64, 0.15);
+  transition: all 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.treasureItems li:last-child {
+  border-bottom: none;
+}
+
+.treasureItems li:hover {
+  color: var(--color-text, #1a1a1a);
+  padding-left: 0.5rem;
+  border-bottom-color: rgba(74, 64, 64, 0.3);
+}
+
+/* 展项之间的分隔 */
+.exhibitDivider {
+  width: 100%;
+  height: 20vh;
+  background: #E2D2B8;
+}
+
+/* 第二个展项页面 - 探险家马赛克 */
+.secondExhibitPage {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background-color: #E2D2B8;
+  overflow: hidden;
+}
+
+/* 探险家内容区（带内边距，含照片+文字） */
+.explorerContent {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  gap: 3rem;
+  padding: 3rem 3rem 3rem 7rem;
+}
+
+/* 左侧图片容器 */
+.leftImageMosaic {
+  width: 76%;
+  height: calc(100vh - 6rem);
+  position: relative;
+}
+
+/* 马赛克容器 - 去掉背景和圆角 */
+.mosaicContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* 马赛克项目 - Z轴瀑布流，物理感 */
+.mosaicItem {
+  position: absolute;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.6s cubic-bezier(0.32, 0.72, 0, 1);
+  filter: drop-shadow(0 12px 35px rgba(26, 26, 26, 0.08));
+}
+
+.mosaicItem::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.1) 0%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.32, 0.72, 0, 1);
+  pointer-events: none;
+}
+
+.mosaicItem:hover {
+  transform: scale(1.04) !important;
+  z-index: 30;
+  filter: drop-shadow(0 25px 60px rgba(26, 26, 26, 0.15));
+}
+
+.mosaicItem:hover::after {
+  opacity: 1;
+}
+
+.mosaicImage {
   width: 100%;
   height: 100%;
   object-fit: contain;
   object-position: center;
   display: block;
+  transition: transform 0.8s cubic-bezier(0.32, 0.72, 0, 1);
+  background-color: #E8DCC6;
 }
 
-/* 说明文本 */
-.descriptionSection {
+.mosaicItem:hover .mosaicImage {
+  transform: scale(1.05);
+}
+
+/* 碎片化裂缝效果 - 表达文物流散 */
+.crackEffect {
   position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  max-width: 90vw;
+  top: 35%;
+  left: 42%;
+  width: 2px;
+  height: 35%;
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    rgba(100, 80, 60, 0.3) 10%,
+    rgba(100, 80, 60, 0.6) 30%,
+    rgba(80, 60, 45, 0.8) 50%,
+    rgba(100, 80, 60, 0.6) 70%,
+    rgba(100, 80, 60, 0.3) 90%,
+    transparent 100%
+  );
+  transform: rotate(-12deg);
   z-index: 20;
+  clip-path: polygon(
+    0% 0%, 70% 3%, 50% 12%, 72% 22%, 38% 38%, 75% 52%, 52% 68%, 70% 82%, 58% 100%,
+    45% 100%, 38% 82%, 55% 68%, 32% 52%, 45% 38%, 62% 22%, 35% 12%, 55% 3%, 0% 0%
+  );
+}
+
+/* 主裂缝的分叉 */
+.crackEffect::before {
+  content: '';
+  position: absolute;
+  top: 25%;
+  left: 75%;
+  width: 1.5px;
+  height: 40%;
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    rgba(100, 80, 60, 0.4) 15%,
+    rgba(80, 60, 45, 0.65) 45%,
+    rgba(100, 80, 60, 0.4) 75%,
+    transparent 100%
+  );
+  transform: rotate(22deg);
+  clip-path: polygon(
+    0% 0%, 60% 6%, 48% 18%, 58% 35%, 42% 52%, 55% 68%, 48% 82%, 55% 100%, 42% 100%
+  );
+}
+
+/* 第二条细裂缝 */
+.crackEffect::after {
+  content: '';
+  position: absolute;
+  top: 60%;
+  left: -30%;
+  width: 1px;
+  height: 28%;
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    rgba(100, 80, 60, 0.35) 20%,
+    rgba(80, 60, 45, 0.55) 50%,
+    rgba(100, 80, 60, 0.35) 80%,
+    transparent 100%
+  );
+  transform: rotate(35deg);
+  clip-path: polygon(
+    0% 0%, 52% 5%, 45% 15%, 50% 32%, 40% 50%, 48% 68%, 45% 85%, 50% 100%, 40% 100%
+  );
+}
+
+/* 流失文物碎片 - 固定在视口，便于跨页面收束到时间轴顶端 */
+.artifactFragment {
+  position: fixed;
+  overflow: hidden;
   pointer-events: none;
-  padding: 1.5rem 2rem;
-  background: rgba(226, 210, 184, 0.9);
-  border-radius: 12px;
+  z-index: 40;
+  filter: drop-shadow(0 8px 25px rgba(26, 26, 26, 0.12));
+  transition: all 0.8s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.artifactFragment::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+  pointer-events: none;
+}
+
+.artifactImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  transition: transform 1s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* 右侧文本区域 */
+.rightTextArea {
+  width: 21%;
+  height: calc(100vh - 6rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: var(--color-text, #1a1a1a);
+  transition: opacity 0.8s cubic-bezier(0.32, 0.72, 0, 1), transform 0.8s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* 默认文本样式 */
+.defaultText {
+  padding: 2rem;
+}
+
+.defaultTitle {
+  font-family: var(--font-display, 'Noto Serif SC', serif);
+  font-size: clamp(1.6rem, 2.8vw, 2rem);
+  font-weight: 600;
+  color: var(--color-text, #1a1a1a);
+  letter-spacing: 0.1em;
+  margin: 0 0 2rem 0;
+  line-height: 1.3;
+}
+
+.defaultDescription {
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  color: var(--color-text-muted, #4a4040);
+  font-weight: 400;
+  line-height: 2.2;
+  letter-spacing: 0.06em;
+  margin: 0;
+  text-align: justify;
+}
+
+/* 探险家信息样式 */
+.explorerInfo {
+  padding: 2rem;
+  animation: fadeIn 0.6s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.explorerName {
+  font-family: var(--font-display, 'Noto Serif SC', serif);
+  font-size: clamp(2.2rem, 3.5vw, 2.8rem);
+  font-weight: 600;
+  color: var(--color-text, #1a1a1a);
+  letter-spacing: 0.12em;
+  margin: 0 0 2.5rem 0;
+  line-height: 1.25;
+  text-align: center;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid rgba(139, 115, 85, 0.25);
+}
+
+.explorerDescription {
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  color: var(--color-text-muted, #4a4040);
+  font-weight: 400;
+  line-height: 2;
+  letter-spacing: 0.05em;
+  margin: 0 0 2.5rem 0;
+  text-align: justify;
+}
+
+.backButton {
+  display: block;
+  width: 100%;
+  margin-top: 2.5rem;
+  padding: 1rem 2rem;
+  background: rgba(139, 115, 85, 0.08);
+  color: #8B7355;
+  border: 1px solid rgba(139, 115, 85, 0.2);
+  border-radius: 9999px;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.32, 0.72, 0, 1);
   text-align: center;
 }
 
-.descriptionTitle {
+.backButton:hover {
+  background: rgba(139, 115, 85, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(139, 115, 85, 0.15);
+}
+
+.backButton:active {
+  transform: translateY(0);
+}
+
+/* 时间轴页面 - 学脉传承 */
+.timelinePage {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 640px;
+  background-color: #E2D2B8;
+  padding: 96px 0 64px 0;
+  overflow: hidden;
+}
+
+.timelineTrack {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 0 8vw;
+}
+
+/* 右侧轴线容器：视口相对，便于碎片收束对齐 */
+.timelineAxisWrap {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 14vw;
+  width: 2px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.timelineAxis {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    rgba(139, 115, 85, 0.35) 4%,
+    rgba(139, 115, 85, 0.55) 50%,
+    rgba(139, 115, 85, 0.35) 96%,
+    transparent 100%
+  );
+  transform-origin: top center;
+}
+
+/* 单个时间节点行 */
+.timelineItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: clamp(52px, 6.4vh, 78px);
+  padding-left: 0;
+}
+
+/* 文字内容（轴线左侧，无文本框） */
+.timelineContent {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 1.4rem;
+  margin-right: calc(14vw + 2.5rem);
+  max-width: 64vw;
+}
+
+.timelineYear {
   font-family: var(--font-display, 'Noto Serif SC', serif);
-  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
-  font-weight: 500;
-  color: var(--color-text, #1a1a1a);
-  letter-spacing: 0.08em;
-  margin-bottom: 1rem;
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+  font-weight: 600;
+  color: #8B7355;
+  letter-spacing: 0.06em;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.descriptionText {
-  font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+.timelineText {
+  font-size: clamp(1rem, 1.4vw, 1.12rem);
   color: var(--color-text-muted, #4a4040);
-  font-weight: 300;
-  line-height: 1.8;
-  letter-spacing: 0.03em;
-  white-space: pre-wrap;
+  font-weight: 400;
+  line-height: 1.7;
+  letter-spacing: 0.05em;
 }
 
-/* 响应式 */
-@media (max-width: 768px) {
-  .descriptionSection {
-    bottom: 5%;
-    left: 5%;
-    right: 5%;
-    max-width: none;
-    padding: 1.5rem;
+/* 轴线上的节点圆点 */
+.timelineNode {
+  position: absolute;
+  left: 86vw;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.timelineNodeInner {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #d4af37, #c9a227);
+  box-shadow:
+    0 0 0 4px rgba(226, 210, 184, 1),
+    0 0 0 5px rgba(201, 162, 39, 0.25),
+    0 2px 8px rgba(201, 162, 39, 0.35);
+}
+
+/* 末项“如今”特殊处理 */
+.timelineItemFinal .timelineYear {
+  color: #1a1a1a;
+  font-style: italic;
+}
+
+.timelineItemFinal .timelineNodeInner {
+  background: radial-gradient(circle at 30% 30%, #1a1a1a, #3a3030);
+  box-shadow:
+    0 0 0 4px rgba(226, 210, 184, 1),
+    0 0 0 5px rgba(26, 26, 26, 0.2),
+    0 0 18px rgba(26, 26, 26, 0.25);
+  animation: timelineFinalPulse 3s cubic-bezier(0.32, 0.72, 0, 1) infinite;
+}
+
+@keyframes timelineFinalPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 0 0 4px rgba(226, 210, 184, 1),
+      0 0 0 5px rgba(26, 26, 26, 0.2),
+      0 0 18px rgba(26, 26, 26, 0.25);
+  }
+  50% {
+    transform: scale(1.15);
+    box-shadow:
+      0 0 0 4px rgba(226, 210, 184, 1),
+      0 0 0 8px rgba(26, 26, 26, 0.08),
+      0 0 28px rgba(26, 26, 26, 0.3);
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .leftImageMosaic {
+    height: 75vh;
   }
 
-  .descriptionTitle {
-    font-size: clamp(1.2rem, 4vw, 1.5rem);
+  .rightTextArea {
+    height: 75vh;
+  }
+
+  .defaultTitle {
+    font-size: clamp(1.4rem, 2.5vw, 1.7rem);
+  }
+
+  .defaultDescription {
+    font-size: clamp(0.9rem, 1.3vw, 1.05rem);
+  }
+}
+
+@media (max-width: 1024px) {
+  .secondExhibitPage {
+    flex-direction: column;
+    padding: 3rem 2rem;
+    gap: 3rem;
+  }
+
+  .leftImageMosaic {
+    width: 100%;
+    height: 65vh;
+  }
+
+  .rightTextArea {
+    width: 100%;
+    height: auto;
+    min-height: 35vh;
+  }
+
+  .mosaicItem:hover {
+    transform: none !important;
+  }
+
+  .descriptionSection {
+    max-width: 85%;
+  }
+
+  .exhibitInfoContainer {
+    position: static;
+    width: 100%;
+    max-width: 90%;
+    margin: 3rem auto 0 auto;
+  }
+
+  .openingPageImage {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .chapter4::before {
+    opacity: 0.02;
+  }
+
+  .openingScene {
+    padding-top: 3rem;
+    padding-bottom: 4rem;
+  }
+
+  .titleImageContainer {
+    margin-bottom: 3rem;
+  }
+
+  .descriptionSection {
+    padding: 2rem;
+    max-width: 92%;
   }
 
   .descriptionText {
-    font-size: clamp(0.85rem, 2.5vw, 1rem);
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
     line-height: 1.8;
+  }
+
+  .exhibitTitle {
+    font-size: clamp(1.5rem, 4vw, 1.8rem);
+  }
+
+  .exhibitDescription {
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    line-height: 1.8;
+  }
+
+  .newExhibitPage {
+    flex-direction: column;
+    padding: 2rem 1rem;
+    min-height: auto;
+    margin-bottom: 6rem;
+  }
+
+  .leftImageContainer {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  .leftImage {
+    width: 45vw;
+    max-width: 160px;
+  }
+
+  .textArea {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding-left: 0;
+  }
+
+  .verticalText {
+    writing-mode: horizontal-tb;
+    height: auto;
+    font-size: clamp(2.2rem, 5vw, 2.8rem);
+    letter-spacing: 0.12em;
+  }
+
+  .questionText {
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    margin-top: 0;
+  }
+
+  .treasuresList {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    min-width: 280px;
+    max-width: 95%;
+    margin-top: 1.5rem;
+    padding: 2rem;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .treasureTitle {
+    font-size: clamp(1.2rem, 3vw, 1.4rem);
+  }
+
+  .treasureItems li {
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    line-height: 2.2;
+  }
+
+  .secondExhibitPage {
+    padding: 2rem 1.5rem;
+    min-height: auto;
+  }
+
+  .leftImageMosaic {
+    height: 55vh;
+  }
+
+  .crackEffect {
+    opacity: 0.4;
+  }
+
+  .defaultTitle {
+    font-size: clamp(1.3rem, 4vw, 1.6rem);
+    margin-bottom: 1.5rem;
+  }
+
+  .defaultDescription {
+    font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+    line-height: 2;
+  }
+
+  .explorerName {
+    font-size: clamp(1.6rem, 4vw, 2rem);
+    padding-bottom: 1rem;
+  }
+
+  .explorerDescription {
+    font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+    line-height: 1.8;
+  }
+
+  .backButton {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .interactionDot {
+    width: 24px;
+    height: 24px;
+    margin-left: 1rem;
+  }
+
+  .timelinePage {
+    height: auto;
+    min-height: auto;
+    padding: 4rem 0 5rem 0;
+  }
+
+  .timelineTrack {
+    padding: 0 1.5rem;
+  }
+
+  .timelineAxisWrap {
+    top: 0;
+    bottom: 0;
+    right: 22px;
+  }
+
+  .timelineNode {
+    left: auto;
+    right: 22px;
+    transform: translate(50%, -50%);
+  }
+
+  .timelineContent {
+    margin-right: calc(28px + 2rem);
+    max-width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
+  .timelineItem {
+    min-height: auto;
+    margin-bottom: 1.4rem;
+  }
+
+  .timelineYear {
+    font-size: 1.2rem;
+  }
+
+  .timelineText {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .artifactFragment {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .leftImage {
+    width: 50vw;
+    max-width: 130px;
+  }
+
+  .treasuresList {
+    padding: 1.5rem;
+  }
+
+  .explorerInfo {
+    padding: 1.5rem;
+  }
+
+  .infoItem {
+    margin-bottom: 1.5rem;
   }
 }

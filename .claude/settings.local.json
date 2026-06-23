@@ -12,7 +12,24 @@
       "Bash(cat src/sections/index.jsx)",
       "Bash(python -c 'from PIL import Image; import os *)",
       "Bash(python -c ' *)",
-      "Bash(python -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('scripts',{}\\),ensure_ascii=False\\)\\)\")"
+      "Bash(python -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('scripts',{}\\),ensure_ascii=False\\)\\)\")",
+      "Skill(run)",
+      "Skill(run:*)",
+      "Bash(command -v chromium-cli)",
+      "Bash(command -v playwright)",
+      "Bash(command -v npx)",
+      "Bash(curl -I http://127.0.0.1:5173)",
+      "Bash(npx -y -p playwright node -e 'const { chromium } = require\\(\"playwright\"\\); \\(async\\(\\) => { const outBase = \"C:/Users/11919/AppData/Local/Temp/claude/f--donorsexhibition/211815ba-7649-4066-aba9-7e07deb64e07/tasks\"; let browser; try { browser = await chromium.launch\\({ headless: true, channel: \"msedge\" }\\); } catch \\(e\\) { browser = await chromium.launch\\({ headless: true }\\); } const page = await browser.newPage\\({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 }\\); await page.goto\\(\"http://127.0.0.1:5173\", { waitUntil: \"networkidle\" }\\); await page.getByRole\\(\"button\", { name: \"进入展览\" }\\).click\\(\\); await page.waitForTimeout\\(1200\\); const title = page.locator\\(\"text=曹氏归义军联姻家族\"\\).first\\(\\); await title.scrollIntoViewIfNeeded\\(\\); await page.waitForTimeout\\(1200\\); await page.screenshot\\({ path: `${outBase}/chapter2-marriage-before.png`, fullPage: false }\\); for \\(let i = 0; i < 22; i += 1\\) { await page.mouse.wheel\\(0, 900\\); await page.waitForTimeout\\(180\\); } await page.screenshot\\({ path: `${outBase}/chapter2-marriage-after.png`, fullPage: false }\\); console.log\\(\"saved\", `${outBase}/chapter2-marriage-before.png`, `${outBase}/chapter2-marriage-after.png`\\); await browser.close\\(\\); }\\)\\(\\).catch\\(err => { console.error\\(err\\); process.exit\\(1\\); }\\);')",
+      "Bash(npx -y playwright screenshot --device=\"Desktop Chrome HiDPI\" http://127.0.0.1:5173 \"C:/Users/11919/AppData/Local/Temp/claude/f--donorsexhibition/211815ba-7649-4066-aba9-7e07deb64e07/tasks/home.png\")",
+      "Bash(npx -y playwright --help)",
+      "Bash(npm exec *)",
+      "Bash(command -v msedge)",
+      "Bash(command -v \"/c/Program Files \\(x86\\)/Microsoft/Edge/Application/msedge.exe\")",
+      "Bash(command -v \"/c/Program Files/Microsoft/Edge/Application/msedge.exe\")",
+      "Bash(npx -p playwright -c \"node -e \\\\\"console.log\\(require.resolve\\('playwright'\\)\\)\\\\\"\")",
+      "Bash(node --check f:/donorsexhibition/src/sections/Chapter4.jsx)",
+      "Bash(xxd)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5174/)"
     ]
   }
 }

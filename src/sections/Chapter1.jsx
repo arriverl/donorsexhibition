@@ -579,6 +579,12 @@ export default function Chapter1() {
                   {li < vowLines.length - 1 && <br />}
                 </span>
               ))}
+              <br />
+              <span className={styles.vowLabel}>
+                {'（发愿文）'.split('').map((ch, ci) => (
+                  <span key={ci} className={`vowChar ${styles.vowLabelChar}`} style={{ display: 'inline-block' }}>{ch}</span>
+                ))}
+              </span>
             </blockquote>
           </div>
           <div ref={g3DonorImgRef} style={{ position: 'relative', width: '90vw', marginLeft: 'calc(-45vw + 50%)', overflow: 'visible' }}>

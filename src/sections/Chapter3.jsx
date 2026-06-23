@@ -273,23 +273,23 @@ export default function Chapter3() {
         })
       }
 
-      // 展项5页面 - 淡入动画
-      if (exhibit5Ref.current && exhibit5TextRef.current) {
-        gsap.set(exhibit5TextRef.current, { y: -50, opacity: 0 })
-
-        gsap.to(exhibit5TextRef.current, {
-          y: 0,
-          opacity: 1,
-          duration: 1.5,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: exhibit5Ref.current,
-            start: 'top 70%',
-            end: 'top 40%',
-            scrub: 1,
-          },
-        })
-      }
+      // 展项5页面 - 淡入动画（217窟暂时注释，不在网页上显示）
+      // if (exhibit5Ref.current && exhibit5TextRef.current) {
+      //   gsap.set(exhibit5TextRef.current, { y: -50, opacity: 0 })
+      //
+      //   gsap.to(exhibit5TextRef.current, {
+      //     y: 0,
+      //     opacity: 1,
+      //     duration: 1.5,
+      //     ease: 'power3.out',
+      //     scrollTrigger: {
+      //       trigger: exhibit5Ref.current,
+      //       start: 'top 70%',
+      //       end: 'top 40%',
+      //       scrub: 1,
+      //     },
+      //   })
+      // }
 
       // 展项6页面 - 文本浮现动画
       if (exhibit6Ref.current && exhibit6TextRef.current) {
@@ -327,10 +327,9 @@ export default function Chapter3() {
         })
       }
 
-      // 展项7页面 - 左上角交互点和文本滑入
-      if (exhibit7Ref.current && exhibit7TopLeftHotspotRef.current && exhibit7TopLeftTextRef.current) {
+      // 展项7页面 - 左上角交互点滑入（文本占位符已注释）
+      if (exhibit7Ref.current && exhibit7TopLeftHotspotRef.current) {
         gsap.set(exhibit7TopLeftHotspotRef.current, { x: -50, opacity: 0 })
-        gsap.set(exhibit7TopLeftTextRef.current, { x: -50, opacity: 0 })
 
         gsap.to(exhibit7TopLeftHotspotRef.current, {
           x: 0,
@@ -345,18 +344,22 @@ export default function Chapter3() {
           },
         })
 
-        gsap.to(exhibit7TopLeftTextRef.current, {
-          x: 0,
-          opacity: 1,
-          duration: 1.5,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: exhibit7Ref.current,
-            start: 'top 70%',
-            end: 'top 40%',
-            scrub: 1,
-          },
-        })
+        // 文本占位符动画（已注释，不在网页上显示）
+        // if (exhibit7TopLeftTextRef.current) {
+        //   gsap.set(exhibit7TopLeftTextRef.current, { x: -50, opacity: 0 })
+        //   gsap.to(exhibit7TopLeftTextRef.current, {
+        //     x: 0,
+        //     opacity: 1,
+        //     duration: 1.5,
+        //     ease: 'power3.out',
+        //     scrollTrigger: {
+        //       trigger: exhibit7Ref.current,
+        //       start: 'top 70%',
+        //       end: 'top 40%',
+        //       scrub: 1,
+        //     },
+        //   })
+        // }
       }
 
       // 展项7页面 - 右下角交互点滑入
@@ -479,26 +482,12 @@ export default function Chapter3() {
         })
       }
 
-      // 展项10 - 左右分栏从两侧滑入
-      if (exhibit10Ref.current && exhibit10LeftRef.current && exhibit10RightRef.current) {
-        gsap.set(exhibit10LeftRef.current, { x: -100, opacity: 0 })
-        gsap.set(exhibit10RightRef.current, { x: 100, opacity: 0 })
-
-        gsap.to(exhibit10LeftRef.current, {
-          x: 0,
-          opacity: 1,
-          duration: 1.5,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: exhibit10Ref.current,
-            start: 'top 70%',
-            end: 'top 40%',
-            scrub: 1,
-          },
-        })
+      // 展项10 - 文本居中淡入滑入
+      if (exhibit10Ref.current && exhibit10RightRef.current) {
+        gsap.set(exhibit10RightRef.current, { y: 50, opacity: 0 })
 
         gsap.to(exhibit10RightRef.current, {
-          x: 0,
+          y: 0,
           opacity: 1,
           duration: 1.5,
           ease: 'power3.out',
@@ -880,7 +869,7 @@ export default function Chapter3() {
         </div>
       </div>
 
-      {/* 展项5 - 217窟 */}
+      {/* 展项5 - 217窟（暂时注释，不在网页上显示）
       <div ref={exhibit5Ref} className={styles.exhibit5}>
         <div className={styles.exhibit5Content}>
           <div ref={exhibit5TextRef} className={styles.exhibit5TopText}>
@@ -893,6 +882,7 @@ export default function Chapter3() {
           </div>
         </div>
       </div>
+      */}
 
       {/* 展项6 - 报恩君亲 */}
       <div ref={exhibit6Ref} className={styles.exhibit6}>
@@ -933,12 +923,12 @@ export default function Chapter3() {
 
       {/* 展项7 - 新展项 */}
       <div ref={exhibit7Ref} className={styles.exhibit7}>
-        {/* 左上角交互点和文本 */}
+        {/* 左上角交互点和文本（文本占位符暂时注释，不在网页上显示） */}
         <div className={styles.exhibit7TopLeftContainer}>
           <Hotspot ref={exhibit7TopLeftHotspotRef} inline />
-          <div ref={exhibit7TopLeftTextRef} className={styles.exhibit7TextPlaceholder}>
+          {/* <div ref={exhibit7TopLeftTextRef} className={styles.exhibit7TextPlaceholder}>
             文本占位符
-          </div>
+          </div> */}
         </div>
 
         {/* 中间五个图片 */}
@@ -992,8 +982,12 @@ export default function Chapter3() {
       <div ref={exhibit9Ref} className={styles.exhibit9}>
         <div className={styles.exhibit9Inner}>
           <div ref={exhibit9LeftRef} className={styles.exhibit9Left}>
-            <div className={styles.exhibit9ImagePlaceholder}>
-              <span className={styles.exhibit9ImageText}>图片占位符</span>
+            <div className={`${styles.exhibit9ImagePlaceholder} ${styles.exhibit9WithImage}`}>
+              <img
+                src="/picture/chap3/阴处士碑.png"
+                alt="阴处士碑"
+                className={styles.exhibit9ActualImage}
+              />
             </div>
           </div>
           <div ref={exhibit9RightRef} className={styles.exhibit9Right}>
@@ -1009,19 +1003,12 @@ export default function Chapter3() {
 
       {/* 展项10 - 归义军 */}
       <div ref={exhibit10Ref} className={styles.exhibit9}>
-        <div className={styles.exhibit9Inner}>
-          <div ref={exhibit10LeftRef} className={styles.exhibit9Left}>
-            <div className={styles.exhibit9ImagePlaceholder}>
-              <span className={styles.exhibit9ImageText}>图片占位符</span>
-            </div>
-          </div>
-          <div ref={exhibit10RightRef} className={styles.exhibit9Right}>
-            <div className={styles.exhibit9Content}>
-              <h3 className={styles.exhibit9Title}>归义军</h3>
-              <p className={styles.exhibit9Text}>
-                吐蕃统治末期，阴氏家族参与张议潮起义，共复河西。归义军建立后，阴氏先后与张氏、曹氏归义军政权联姻。凭借联姻与军功，阴氏族人出任凉州防御使、河西都僧统等要职。石壁见证了阴氏家族联姻策略的终极兑现，也折射出敦煌世家大族在晚唐五代风云变幻中的存续之道。
-              </p>
-            </div>
+        <div ref={exhibit10RightRef} className={styles.exhibit9Right} style={{ flex: '1 1 100%', textAlign: 'center' }}>
+          <div className={styles.exhibit9Content} style={{ maxWidth: '60ch', margin: '0 auto' }}>
+            <h3 className={styles.exhibit9Title}>归义军</h3>
+            <p className={styles.exhibit9Text}>
+              吐蕃统治末期，阴氏家族参与张议潮起义，共复河西。归义军建立后，阴氏先后与张氏、曹氏归义军政权联姻。凭借联姻与军功，阴氏族人出任凉州防御使、河西都僧统等要职。石壁见证了阴氏家族联姻策略的终极兑现，也折射出敦煌世家大族在晚唐五代风云变幻中的存续之道。
+            </p>
           </div>
         </div>
       </div>

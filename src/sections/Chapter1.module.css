@@ -385,6 +385,16 @@
   overflow: hidden;
 }
 
+/* “（发愿文）”末尾标注：另起一列，字号稍小、加粗，字体随文，参与逐字动画 */
+.vowLabel {
+  display: inline;
+}
+
+.vowLabelChar {
+  font-size: 22px;
+  font-weight: 700;
+}
+
 /* 发愿文舞台：横向介绍文字与竖向发愿文同处一层，便于重新排列组合 */
 .vowStage {
   position: relative;

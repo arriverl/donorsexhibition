@@ -1,0 +1,113 @@
+/* Epilogue - 结语（呼应序章序言字体） */
+.epilogue {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-bg, #E2D2B8);
+  padding: 0;
+}
+
+/* 巨幅水印字 */
+.watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display, 'Noto Serif SC', serif);
+  font-size: clamp(18rem, 46vw, 42rem);
+  font-weight: 600;
+  color: #1a1a1a;
+  opacity: 0.035;
+  line-height: 1;
+  letter-spacing: 0;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+.inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: min(31em, 88vw);
+  margin: 0 auto;
+  padding: clamp(6rem, 16vh, 12rem) 1.5rem;
+}
+
+/* 细线 + 菱形 开篇饰线 */
+.rule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 56%;
+  max-width: 300px;
+  margin: 0 auto 3.2rem;
+}
+
+.ruleLine {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(139, 90, 43, 0.45), transparent);
+}
+
+.ruleDiamond {
+  width: 8px;
+  height: 8px;
+  background: #c9a227;
+  transform: rotate(45deg);
+  box-shadow: 0 0 0 3px rgba(226, 210, 184, 1), 0 0 12px rgba(201, 162, 39, 0.4);
+}
+
+/* 正文：呼应序章序言（Noto Serif SC / 600 / 1.8 行高 / 0.02em 字距） */
+.body {
+  font-family: var(--font-display, 'Noto Serif SC', serif);
+  font-size: clamp(1.15rem, 2.2vw, 1.825rem);
+  font-weight: 600;
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+  color: var(--color-text, #1a1a1a);
+  margin: 0 0 0.8em 0;
+  text-align: left;
+}
+
+.body:last-of-type {
+  margin-bottom: 0;
+}
+
+/* 收束三点 */
+.closing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  margin: 3.6rem auto 0;
+}
+
+.closingDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(139, 90, 43, 0.45);
+}
+
+.closingDotMid {
+  width: 7px;
+  height: 7px;
+  background: #c9a227;
+  box-shadow: 0 0 0 3px rgba(226, 210, 184, 1);
+}
+
+@media (max-width: 768px) {
+  .inner {
+    padding: 5rem 1.25rem;
+  }
+
+  .rule {
+    width: 78%;
+  }
+
+  .body {
+    font-size: clamp(1.05rem, 5vw, 1.4rem);
+    line-height: 1.75;
+  }
+}

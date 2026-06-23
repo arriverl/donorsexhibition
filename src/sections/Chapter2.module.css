@@ -153,6 +153,240 @@
   overflow: visible;
 }
 
+/* 新展项：曹氏归义军联姻家族 */
+.marriageFamilySection {
+  position: relative;
+  display: block;
+  align-items: stretch;
+  justify-content: flex-start;
+  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+  padding: 0;
+}
+
+.marriageFamilyExhibit {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 42vh 1fr;
+  padding: 8vh 0 0;
+}
+
+.marriageFamilyTop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marriageFamilyTitle {
+  font-family: var(--font-display, 'Noto Serif SC', serif);
+  font-size: clamp(2rem, 3.6vw, 3.4rem);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--color-text, #1a1a1a);
+  text-align: center;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}
+
+.marriageFamilyBottomViewport {
+  position: relative;
+  overflow: hidden;
+  width: 100vw;
+  height: 100%;
+}
+
+.marriageFamilyBottom {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  gap: 0;
+  align-items: stretch;
+  width: 100vw;
+  height: 100%;
+}
+
+.marriageFamilyCard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34vh;
+  height: 100%;
+  padding: 1.5rem 0.8rem;
+  border-top: 1px solid rgba(60, 44, 30, 0.18);
+  border-bottom: 1px solid rgba(60, 44, 30, 0.18);
+  border-right: 1px solid rgba(60, 44, 30, 0.18);
+  background: rgba(255, 250, 242, 0.36);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease, filter 0.3s ease;
+}
+
+.marriageFamilyCard:first-child {
+  border-left: 1px solid rgba(60, 44, 30, 0.18);
+}
+
+.marriageFamilyCardText {
+  font-family: var(--font-display, 'Noto Serif SC', serif);
+  font-size: clamp(1rem, 1.5vw, 1.35rem);
+  line-height: 1.8;
+  letter-spacing: 0.18em;
+  color: var(--color-text, #1a1a1a);
+  text-align: center;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}
+
+.marriageFamilyOverlayLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.marriageFamilyOverlayBlank {
+  background: transparent;
+}
+
+.marriageFamilyOverlayCell {
+  background: rgba(139, 0, 0, 0.78);
+  border-top: 1px solid rgba(95, 0, 0, 0.9);
+  border-bottom: 1px solid rgba(95, 0, 0, 0.9);
+  border-right: 1px solid rgba(95, 0, 0, 0.9);
+}
+
+.marriageFamilyOverlayBlank + .marriageFamilyOverlayCell {
+  border-left: 1px solid rgba(95, 0, 0, 0.9);
+}
+
+.marriageFamilyImageStage {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding: 2vh 0;
+  pointer-events: none;
+}
+
+.marriageFamilyImageGrid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  direction: rtl;
+  width: 100%;
+  height: 100%;
+}
+
+.marriageFamilyImageCell {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-width: 0;
+  padding: 0 0.8vw;
+}
+
+.marriageFamilyImage {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.18));
+}
+
+/* 图片外层：shrink-wrap 图片，承载左上角交互点 */
+.marriageFamilyImageWrap {
+  position: relative;
+  display: inline-block;
+  max-height: 100%;
+  max-width: 100%;
+  pointer-events: auto;
+  line-height: 0;
+}
+
+/* 单个人物详情卡片：只占标题行（上半部分），左图右文（白字） */
+.marriageDetailCard {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3vw;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 2vh 4vw;
+  background: #8b0000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  overflow: hidden;
+}
+
+.marriageDetailImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 0;
+}
+
+.marriageDetailImage img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.35));
+}
+
+.marriageDetailText {
+  color: #ffffff;
+  min-width: 0;
+}
+
+.marriageDetailTitle {
+  font-family: var(--font-display, 'Noto Serif SC', serif);
+  font-size: clamp(1.4rem, 2.4vw, 2.2rem);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: #ffffff;
+  margin-bottom: 1.2rem;
+}
+
+.marriageDetailDesc {
+  font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+  line-height: 2;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  font-weight: 300;
+  white-space: pre-line;
+}
+
+.marriageDetailClose {
+  position: absolute;
+  top: 1.5vh;
+  right: 2vw;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  font-size: 1.7rem;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.marriageDetailClose:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .portraits {
@@ -168,6 +402,42 @@
 
   .titleOverlay {
     top: 8%;
+  }
+
+  .marriageFamilyExhibit {
+    grid-template-rows: 28vh 1fr;
+    padding: 6vh 0 0;
+  }
+
+  .marriageFamilyBottom,
+  .marriageFamilyOverlayLayer {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+  }
+
+  .marriageFamilyCard {
+    min-height: 20vh;
+    padding: 1rem 0.35rem;
+  }
+
+  .marriageFamilyCardText {
+    font-size: clamp(0.82rem, 2.8vw, 1rem);
+    letter-spacing: 0.12em;
+  }
+
+  .marriageFamilyImageGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+  }
+
+  .marriageFamilyImageCell {
+    padding: 0 1vw;
+  }
+
+  .marriageDetailCard {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    gap: 1vh;
+    padding: 1.5vh 5vw;
   }
 
   .decoration {

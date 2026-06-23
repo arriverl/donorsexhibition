@@ -37,6 +37,24 @@ const exhibits = {
 }
 
 export default function Chapter2() {
+  const marriageFamilyCards = ['曹氏归义军联姻家族', '翟氏', '张氏', '罗氏', '阴氏', '回鹘', '索氏', '于阗', '宋氏']
+  const marriageFamilyImages = [
+    { src: '/picture/chap2/武威郡夫人.png', alt: '武威郡夫人', title: '武威郡夫人',
+      cardSrc: '/picture/chap2/ai武威郡夫人.png',
+      desc: '五代曹氏归义军时期 第61窟 “故伯母武威郡夫人阴氏”供养像\n位于莫高窟第61窟右侧第一身。画像设于洞窟甬道右侧首列，榜题“故伯母武威郡夫人阴氏”。\n“武威郡” 为阴氏郡望标识，印证墓主出身敦煌阴氏望族。' },
+    { src: '/picture/chap2/61窟外甥小娘子阴氏一心供养 (2).png', alt: '61窟外甥小娘子阴氏一心供养', title: '外甥小娘子阴氏',
+      cardSrc: '/picture/chap2/61窟外甥小娘子阴氏一心供养.png',
+      desc: '五代曹氏归义军时期 第61窟 “外甥小娘子阴氏”供养像\n位于莫高窟第61窟右侧第一身。榜题“外甥小娘子阴氏”。\n“外甥”说明此阴氏为曹氏外戚，是曹氏宗室女子嫁入阴氏所生之女。依托曹阴联姻的家世得以入画，和同窟武威郡夫人阴氏互为补充，印证两家长期通婚结盟。' },
+    { src: '/picture/chap2/ai延萌.png', alt: 'ai延萌', title: '阴延萌', desc: '（说明文字待补充）' },
+    { src: '/picture/chap2/ai延胜.png', alt: 'ai延胜', title: '阴延胜', desc: '（说明文字待补充）' },
+    { src: '/picture/chap2/阴子升.png', alt: '阴子升', title: '阴子升',
+      cardSrc: '/picture/chap2/12、河西督僧统抠图版.png',
+      desc: '五代曹氏归义军时期 P.3720 敦煌文书 《河西都僧统阴海晏墓志铭并序》\n志文载明阴海晏出任河西都僧统，是五代沙州佛教最高统领，总领河西僧团教务，为曹氏归义军倚重的佛门领袖。墓志与莫高窟98窟供养题记相互印证，完整记录阴氏祖孙两代接连与曹氏联姻：阴海晏一辈，曹议金将女儿延胜、延萌出嫁阴氏；阴海晏之孙阴子升迎娶曹议金第十三女，两代姻亲层层绑定。\n曹氏通过两代婚嫁笼络敦煌老牌望族阴氏，既以宗室女缔结世俗宗族盟约，又借阴海晏执掌僧权掌控全境佛教势力。' },
+    { src: '/picture/chap2/阴善雄.png', alt: '阴善雄', title: '阴善雄',
+      cardSrc: '/picture/chap2/13.P.2482阴善雄墓志铭抠图版.png',
+      desc: '五代曹氏归义军时期 P.2482 敦煌文书 《阴善雄墓志铭》\n本卷为是五代敦煌阴氏望族核心一手文献。\n墓主阴善雄出身敦煌顶级阴氏宗族，为曹议金妹夫（曹议金胞姊嫁阴善雄），是曹氏初代联姻阴氏的关键人物。墓志载明其官衔：归义军节度使内亲从都头、守常乐县令、银青光禄大夫、检校国子祭酒兼御史大夫、上柱国，身居归义军藩镇要职，执掌常乐县地方军政，是曹议金倚重的心腹地方大员。\n图源：敦煌研究院官网' },
+  ]
+
   const openingSceneRef = useRef(null)
   const portraitLeftRef = useRef(null)
   const portraitRightRef = useRef(null)
@@ -54,11 +72,30 @@ export default function Chapter2() {
   const yinLadyHotspotRef = useRef(null)
   const caoLadyContainerRef = useRef(null)
   const caoLadyDocRef = useRef(null)
+  const marriageFamilySectionRef = useRef(null)
+  const yinXiaoNiangZiRef = useRef(null)
+  const marriageFamilyBottomRef = useRef(null)
+  const marriageFamilyCardsLayerRef = useRef(null)
+  const marriageFamilyOverlayLayerRef = useRef(null)
+  const marriageFamilyImageStageRef = useRef(null)
+  const yinFamilyCardRef = useRef(null)
+  const glowTweenRef = useRef(null)
+  const glowPlayedRef = useRef(false)
   const [activePanel, setActivePanel] = useState(null)
+  const [activeFigure, setActiveFigure] = useState(null)
 
   const togglePanel = (id) => {
     setActivePanel((prev) => (prev === id ? null : id))
   }
+
+  useEffect(() => {
+    if (activeFigure === null) return
+    const onKey = (e) => {
+      if (e.key === 'Escape') setActiveFigure(null)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [activeFigure])
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -211,60 +248,52 @@ export default function Chapter2() {
         // 标志，确保交互点只显示一次
         let hotspotShown = false
 
-        // 等待图像加载完成后设置起始位置
-        const updatePosition = () => {
-          const imageWidth = yinLadyRef.current?.offsetWidth || 0
-          if (imageWidth > 0) {
-            // 起始位置：让图像靠右完全可见
-            const startX = window.innerWidth - imageWidth
-            // 结束位置：图像靠左完全可见
-            const endX = 0
-
-            gsap.set(yinLadyRef.current, {
-              x: startX,
-              opacity: 1
-            })
-
-            // 创建动画：从右侧移动到左侧，禁用倒放
-            gsap.to(yinLadyRef.current, {
-              x: endX,
-              opacity: 1,
-              duration: 3,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: yinLadySectionRef.current,
-                start: 'top top',
-                end: '+=600%',
-                pin: true,
-                scrub: 1,
-                pinSpacing: true,
-                // 禁用倒放
-                once: true,
-                // 监听进度，动画接近完成时显示交互点
-                onUpdate: (self) => {
-                  if (!hotspotShown && self.progress >= 0.98) {
-                    hotspotShown = true
-                    const hotspotTop = '20vh'
-                    const hotspotLeft = `${imageWidth * 0.8}px`
-                    gsap.set(yinLadyHotspotRef.current, { top: hotspotTop, left: hotspotLeft })
-                    gsap.to(yinLadyHotspotRef.current, {
-                      opacity: 1,
-                      scale: 1,
-                      duration: 0.3,
-                      ease: 'back.out(1.7)'
-                    })
-                  }
-                },
+        // 同步创建 pin ScrollTrigger，保证后续展项（marriageFamily）能正确计算 600vh 的 pinSpacer
+        gsap.fromTo(
+          yinLadyRef.current,
+          {
+            x: () => Math.max(0, window.innerWidth - (yinLadyRef.current?.offsetWidth || 0)),
+            opacity: 1,
+          },
+          {
+            x: 0,
+            opacity: 1,
+            duration: 3,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: yinLadySectionRef.current,
+              start: 'top top',
+              end: '+=600%',
+              pin: true,
+              scrub: 1,
+              pinSpacing: true,
+              invalidateOnRefresh: true,
+              // 监听进度，动画接近完成时显示交互点
+              onUpdate: (self) => {
+                if (!hotspotShown && self.progress >= 0.98) {
+                  hotspotShown = true
+                  const imageWidth = yinLadyRef.current?.offsetWidth || 0
+                  const hotspotTop = '20vh'
+                  const hotspotLeft = `${imageWidth * 0.8}px`
+                  gsap.set(yinLadyHotspotRef.current, { top: hotspotTop, left: hotspotLeft })
+                  gsap.to(yinLadyHotspotRef.current, {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.3,
+                    ease: 'back.out(1.7)'
+                  })
+                }
               },
-            })
+            },
           }
-        }
+        )
 
-        // 等待图像加载
+        // 图片加载完成后刷新一次，让 from 的 x 起点按真实宽度重算
+        const refreshOnLoad = () => ScrollTrigger.refresh()
         if (yinLadyRef.current.complete) {
-          updatePosition()
+          refreshOnLoad()
         } else {
-          yinLadyRef.current.onload = updatePosition
+          yinLadyRef.current.addEventListener('load', refreshOnLoad, { once: true })
         }
       }
 
@@ -291,27 +320,91 @@ export default function Chapter2() {
         )
       }
 
-      // 左侧文书与文本渐入动画
-      if (caoLadyDocRef.current) {
-        gsap.fromTo(
-          caoLadyDocRef.current,
-          {
-            opacity: 0,
-            x: -60,
+      // 曹氏归义军联姻家族展项 pinned 交互
+      if (
+        marriageFamilySectionRef.current &&
+        yinXiaoNiangZiRef.current &&
+        marriageFamilyBottomRef.current &&
+        marriageFamilyCardsLayerRef.current &&
+        marriageFamilyOverlayLayerRef.current &&
+        marriageFamilyImageStageRef.current &&
+        yinFamilyCardRef.current
+      ) {
+        gsap.set(yinXiaoNiangZiRef.current, { opacity: 1, y: 0 })
+        gsap.set(marriageFamilyOverlayLayerRef.current, { yPercent: 0 })
+        gsap.set(marriageFamilyCardsLayerRef.current, { autoAlpha: 1, y: 0, scale: 1 })
+        gsap.set(marriageFamilyImageStageRef.current, { autoAlpha: 0, xPercent: 8 })
+        gsap.set(yinFamilyCardRef.current, {
+          boxShadow: '0 12px 30px rgba(0, 0, 0, 0.08)',
+          borderColor: 'rgba(60, 44, 30, 0.18)',
+          filter: 'brightness(1)',
+        })
+
+        glowTweenRef.current?.kill()
+        glowTweenRef.current = gsap.timeline({ paused: true })
+          .to(yinFamilyCardRef.current, {
+            boxShadow: '0 0 34px rgba(255, 228, 130, 0.95), 0 0 70px rgba(255, 188, 70, 0.6)',
+            borderColor: 'rgba(196, 143, 32, 0.95)',
+            filter: 'brightness(1.16)',
+            duration: 0.5,
+            ease: 'power2.out',
+          })
+          .to(yinFamilyCardRef.current, {
+            boxShadow: '0 12px 30px rgba(0, 0, 0, 0.08)',
+            borderColor: 'rgba(60, 44, 30, 0.18)',
+            filter: 'brightness(1)',
+            duration: 0.5,
+            ease: 'power2.inOut',
+          })
+
+        const marriageFamilyTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: marriageFamilySectionRef.current,
+            start: 'top top',
+            end: '+=500%',
+            pin: true,
+            pinSpacing: true,
+            scrub: 1,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              if (self.progress >= 0.56 && !glowPlayedRef.current) {
+                glowPlayedRef.current = true
+                glowTweenRef.current?.restart()
+              }
+              if (self.progress < 0.56) {
+                glowPlayedRef.current = false
+                glowTweenRef.current?.pause(0)
+                gsap.set(yinFamilyCardRef.current, {
+                  boxShadow: '0 12px 30px rgba(0, 0, 0, 0.08)',
+                  borderColor: 'rgba(60, 44, 30, 0.18)',
+                  filter: 'brightness(1)',
+                })
+              }
+            },
           },
-          {
-            opacity: 1,
-            x: 0,
+        })
+
+        marriageFamilyTl
+          .to(marriageFamilyOverlayLayerRef.current, {
+            yPercent: -100,
+            duration: 5.5,
+            ease: 'none',
+          })
+          .to({}, { duration: 1.4 })
+          .to(marriageFamilyCardsLayerRef.current, {
+            autoAlpha: 0,
+            y: -20,
+            scale: 0.985,
             duration: 1.2,
             ease: 'power2.out',
-            scrollTrigger: {
-              trigger: caoLadyDocRef.current,
-              start: 'top 85%',
-              end: 'top 50%',
-              scrub: 1,
-            },
-          }
-        )
+          })
+          .to(marriageFamilyImageStageRef.current, {
+            autoAlpha: 1,
+            xPercent: 0,
+            duration: 1.8,
+            ease: 'power2.out',
+          }, '<0.15')
       }
 
     }, openingSceneRef)
@@ -545,6 +638,86 @@ export default function Chapter2() {
               visible={activePanel === 'caoLady'}
               onClose={() => setActivePanel(null)}
             />
+          </div>
+        </div>
+      </div>
+
+      {/* 阴家小娘子新展项 - 在61窟女供养人像与阴家小娘子文书下方 */}
+      <div ref={marriageFamilySectionRef} className={`section section--chapter-2 relative ${styles.marriageFamilySection}`}>
+        <div ref={yinXiaoNiangZiRef} className={styles.marriageFamilyExhibit}>
+          {activeFigure !== null && marriageFamilyImages[activeFigure] ? (
+            <div className={styles.marriageDetailCard} role="dialog" aria-modal="true">
+              <div className={styles.marriageDetailImage}>
+                <img
+                  src={marriageFamilyImages[activeFigure].cardSrc || marriageFamilyImages[activeFigure].src}
+                  alt={marriageFamilyImages[activeFigure].alt}
+                />
+              </div>
+              <div className={styles.marriageDetailText}>
+                <h4 className={styles.marriageDetailTitle}>
+                  {marriageFamilyImages[activeFigure].title}
+                </h4>
+                <p className={styles.marriageDetailDesc}>
+                  {marriageFamilyImages[activeFigure].desc}
+                </p>
+              </div>
+              <button
+                type="button"
+                className={styles.marriageDetailClose}
+                onClick={() => setActiveFigure(null)}
+                aria-label="关闭"
+              >
+                &times;
+              </button>
+            </div>
+          ) : (
+            <div className={styles.marriageFamilyTop}>
+              <div className={styles.marriageFamilyTitle}>曹氏归义军联姻家族</div>
+            </div>
+          )}
+          <div ref={marriageFamilyBottomRef} className={styles.marriageFamilyBottomViewport}>
+            <div ref={marriageFamilyCardsLayerRef} className={styles.marriageFamilyBottom}>
+              {marriageFamilyCards.map((item) => (
+                <div
+                  key={item}
+                  ref={item === '阴氏' ? yinFamilyCardRef : null}
+                  className={styles.marriageFamilyCard}
+                >
+                  <div className={styles.marriageFamilyCardText}>{item}</div>
+                </div>
+              ))}
+            </div>
+
+            <div ref={marriageFamilyOverlayLayerRef} className={styles.marriageFamilyOverlayLayer} aria-hidden="true">
+              {marriageFamilyCards.map((item, index) => (
+                <div
+                  key={`${item}-overlay`}
+                  className={index === 0 ? styles.marriageFamilyOverlayBlank : styles.marriageFamilyOverlayCell}
+                />
+              ))}
+            </div>
+
+            <div ref={marriageFamilyImageStageRef} className={styles.marriageFamilyImageStage}>
+              <div className={styles.marriageFamilyImageGrid}>
+                {marriageFamilyImages.map((image, idx) => (
+                  <div key={image.src} className={styles.marriageFamilyImageCell}>
+                    <div className={styles.marriageFamilyImageWrap}>
+                      <img
+                        src={image.src}
+                        alt={image.alt}
+                        className={styles.marriageFamilyImage}
+                      />
+                      <Hotspot
+                        x={14}
+                        y={14}
+                        active={activeFigure === idx}
+                        onClick={() => setActiveFigure(idx)}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
