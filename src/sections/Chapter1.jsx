@@ -581,7 +581,7 @@ export default function Chapter1() {
               ))}
               <br />
               <span className={styles.vowLabel}>
-                {'（发愿文）'.split('').map((ch, ci) => (
+                {'（文愿发）'.split('').map((ch, ci) => (
                   <span key={ci} className={`vowChar ${styles.vowLabelChar}`} style={{ display: 'inline-block' }}>{ch}</span>
                 ))}
               </span>
