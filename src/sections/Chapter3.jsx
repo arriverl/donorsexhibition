@@ -15,6 +15,11 @@ const exhibits = {
     subtitle: '初唐 长寿二年（693）译场列位',
     description: '《宝雨经》是佛教经典，经唐代官方写译及传播后，成为支持武则天树立女性君主，操弄政权的张目。经书以释迦摩尼的口吻告诉武则天：按照佛教理论，女人有五种阶位无法达到，但武则天是特殊的，她可以做轮转王和菩萨。',
   },
+  cave431: {
+    title: '第431窟南壁壁画',
+    subtitle: '初唐 莫高窟第431窟',
+    description: '431窟是阴氏家族在前人基础上在唐代重修的洞窟，其将洞窟地面下挖，在中心塔柱柱座以及洞窟四壁绘制了壁画。南壁绘有"九品往生"，其中下三品画面生动表现了善导大师的净土思想与凡夫论。这建立了敦煌最早往生西方净土的道场，充分彰显出阴氏家族敏锐的宗教审美与艺术认知。',
+  },
   baoEnJunQin: {
     title: '中唐 第231窟 报恩君亲供养人',
     subtitle: '阴嘉政报恩窟',
@@ -52,6 +57,7 @@ export default function Chapter3() {
   const exhibit2Ref = useRef(null)
   const exhibit2TextRef = useRef(null)
   const exhibit2ImageRef = useRef(null)
+  const exhibit2HotspotRef = useRef(null)
   const exhibit3Ref = useRef(null)
   const exhibit4Ref = useRef(null)
   const exhibit4Section1Ref = useRef(null)
@@ -59,13 +65,16 @@ export default function Chapter3() {
   const exhibit4Section3Ref = useRef(null)
   const exhibit5Ref = useRef(null)
   const exhibit5TextRef = useRef(null)
+  const compassRef = useRef(null)
+  const compassNeedleRef = useRef(null)
+  const compassAngleRef = useRef(0)
+  const isDraggingRef = useRef(false)
+  const lastAngleRef = useRef(0)
   const exhibit6Ref = useRef(null)
   const exhibit6TextRef = useRef(null)
   const exhibit6HotspotRef = useRef(null)
   const exhibit7Ref = useRef(null)
-  const exhibit7TopLeftHotspotRef = useRef(null)
   const exhibit7BottomRightHotspotRef = useRef(null)
-  const exhibit7TopLeftTextRef = useRef(null)
   const exhibit8Ref = useRef(null)
   const exhibit9Ref = useRef(null)
   const exhibit9LeftRef = useRef(null)
@@ -85,7 +94,7 @@ export default function Chapter3() {
   const [activePanel, setActivePanel] = useState(null)
   const [activeTuJing, setActiveTuJing] = useState(0)
   const [particles, setParticles] = useState([])
-
+  const [compassDirection, setCompassDirection] = useState('北')
   // 展项4 - 图经叠层查看器
   const tuJingImages = [
     '/picture/chap3/图经1.png',
@@ -95,6 +104,72 @@ export default function Chapter3() {
 
   const togglePanel = (id) => {
     setActivePanel((prev) => (prev === id ? null : id))
+  }
+
+  // 罗盘拖动
+  const getAngleFromPivot = (clientX, clientY) => {
+    if (!compassRef.current) return 0
+    const rect = compassRef.current.getBoundingClientRect()
+    const pivotX = rect.left + rect.width / 2
+    const pivotY = rect.top + rect.height / 2
+    return Math.atan2(clientY - pivotY, clientX - pivotX) * (180 / Math.PI)
+  }
+
+  const handleCompassDragStart = (e) => {
+    e.preventDefault()
+    isDraggingRef.current = true
+    const pt = e.touches ? e.touches[0] : e
+    lastAngleRef.current = getAngleFromPivot(pt.clientX, pt.clientY)
+
+    const onMove = (ev) => {
+      if (!isDraggingRef.current) return
+      ev.preventDefault()
+      const pt = ev.touches ? ev.touches[0] : ev
+      const angle = getAngleFromPivot(pt.clientX, pt.clientY)
+      let delta = angle - lastAngleRef.current
+      if (delta > 180) delta -= 360
+      if (delta < -180) delta += 360
+      compassAngleRef.current += delta
+      lastAngleRef.current = angle
+      gsap.set(compassNeedleRef.current, { rotation: compassAngleRef.current, svgOrigin: '0 0' })
+    }
+
+    const onEnd = () => {
+      isDraggingRef.current = false
+      // 吸附到最近的 东(90°) 南(180°) 西(270°) 北(0°/360°)
+      const snapAngles = [0, 90, 180, 270]
+      let norm = compassAngleRef.current % 360
+      if (norm < 0) norm += 360
+      let nearest = snapAngles[0]
+      let minDiff = 360
+      for (const a of snapAngles) {
+        let d = Math.abs(norm - a)
+        if (d > 180) d = 360 - d
+        if (d < minDiff) { minDiff = d; nearest = a }
+      }
+      let diff = nearest - norm
+      if (diff > 180) diff -= 360
+      if (diff < -180) diff += 360
+      const target = compassAngleRef.current + diff
+      gsap.to(compassNeedleRef.current, {
+        rotation: target,
+        duration: 0.5,
+        ease: 'power2.out',
+        svgOrigin: '0 0',
+      })
+      compassAngleRef.current = target
+      const dirMap = { 0: '北', 90: '东', 180: '南', 270: '西' }
+      setCompassDirection(dirMap[nearest] || '北')
+      document.removeEventListener('mousemove', onMove)
+      document.removeEventListener('mouseup', onEnd)
+      document.removeEventListener('touchmove', onMove)
+      document.removeEventListener('touchend', onEnd)
+    }
+
+    document.addEventListener('mousemove', onMove)
+    document.addEventListener('mouseup', onEnd)
+    document.addEventListener('touchmove', onMove, { passive: false })
+    document.addEventListener('touchend', onEnd)
   }
 
   useEffect(() => {
@@ -195,6 +270,24 @@ export default function Chapter3() {
         })
       }
 
+      // 展项2 - 交互点浮现动画
+      if (exhibit2Ref.current && exhibit2HotspotRef.current) {
+        gsap.set(exhibit2HotspotRef.current, { opacity: 0, scale: 0.8 })
+
+        gsap.to(exhibit2HotspotRef.current, {
+          opacity: 1,
+          scale: 1,
+          duration: 1.5,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: exhibit2Ref.current,
+            start: 'top 25%',
+            end: 'top 10%',
+            scrub: 1,
+          },
+        })
+      }
+
       // 展项3页面 - 3D模型居中淡入
       if (exhibit3Ref.current) {
         gsap.set(exhibit3Ref.current, { opacity: 0, scale: 0.9 })
@@ -259,23 +352,23 @@ export default function Chapter3() {
         })
       }
 
-      // 展项5页面 - 淡入动画（217窟暂时注释，不在网页上显示）
-      // if (exhibit5Ref.current && exhibit5TextRef.current) {
-      //   gsap.set(exhibit5TextRef.current, { y: -50, opacity: 0 })
-      //
-      //   gsap.to(exhibit5TextRef.current, {
-      //     y: 0,
-      //     opacity: 1,
-      //     duration: 1.5,
-      //     ease: 'power3.out',
-      //     scrollTrigger: {
-      //       trigger: exhibit5Ref.current,
-      //       start: 'top 70%',
-      //       end: 'top 40%',
-      //       scrub: 1,
-      //     },
-      //   })
-      // }
+      // 展项5页面 - 淡入动画
+      if (exhibit5Ref.current && exhibit5TextRef.current) {
+        gsap.set(exhibit5TextRef.current, { y: -50, opacity: 0 })
+
+        gsap.to(exhibit5TextRef.current, {
+          y: 0,
+          opacity: 1,
+          duration: 1.5,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: exhibit5Ref.current,
+            start: 'top 70%',
+            end: 'top 40%',
+            scrub: 1,
+          },
+        })
+      }
 
       // 展项6页面 - 文本浮现动画
       if (exhibit6Ref.current && exhibit6TextRef.current) {
@@ -311,41 +404,6 @@ export default function Chapter3() {
             scrub: 1,
           },
         })
-      }
-
-      // 展项7页面 - 左上角交互点滑入（文本占位符已注释）
-      if (exhibit7Ref.current && exhibit7TopLeftHotspotRef.current) {
-        gsap.set(exhibit7TopLeftHotspotRef.current, { x: -50, opacity: 0 })
-
-        gsap.to(exhibit7TopLeftHotspotRef.current, {
-          x: 0,
-          opacity: 1,
-          duration: 1.5,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: exhibit7Ref.current,
-            start: 'top 70%',
-            end: 'top 40%',
-            scrub: 1,
-          },
-        })
-
-        // 文本占位符动画（已注释，不在网页上显示）
-        // if (exhibit7TopLeftTextRef.current) {
-        //   gsap.set(exhibit7TopLeftTextRef.current, { x: -50, opacity: 0 })
-        //   gsap.to(exhibit7TopLeftTextRef.current, {
-        //     x: 0,
-        //     opacity: 1,
-        //     duration: 1.5,
-        //     ease: 'power3.out',
-        //     scrollTrigger: {
-        //       trigger: exhibit7Ref.current,
-        //       start: 'top 70%',
-        //       end: 'top 40%',
-        //       scrub: 1,
-        //     },
-        //   })
-        // }
       }
 
       // 展项7页面 - 右下角交互点滑入
@@ -708,12 +766,10 @@ export default function Chapter3() {
                 alt="宝雨经"
                 className={styles.exhibit1Image}
               />
-              <Hotspot
-                x={50}
-                y={50}
-                active={activePanel === 'baoYuJing'}
-                onClick={() => togglePanel('baoYuJing')}
-              />
+              <div className={styles.exhibit1Caption}>
+                <h4 className={styles.exhibit1CaptionTitle}>{exhibits.baoYuJing.title}</h4>
+                <p className={styles.exhibit1CaptionDesc}>{exhibits.baoYuJing.description}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -738,8 +794,23 @@ export default function Chapter3() {
                 className={styles.exhibit2Image}
               />
             </div>
+            <Hotspot
+              ref={exhibit2HotspotRef}
+              x={80}
+              y={95}
+              active={activePanel === 'cave431'}
+              onClick={() => togglePanel('cave431')}
+            />
           </div>
         </div>
+        {/* 展品面板 */}
+        <ExhibitPanel
+          title={exhibits.cave431.title}
+          subtitle={exhibits.cave431.subtitle}
+          description={exhibits.cave431.description}
+          visible={activePanel === 'cave431'}
+          onClose={() => setActivePanel(null)}
+        />
       </div>
 
       {/* 展项3 - 北大像 */}
@@ -747,6 +818,7 @@ export default function Chapter3() {
         <div className={styles.exhibit3Content}>
           <div className={styles.exhibit3Model}>
             <ModelViewer key="model-xiangta" modelPath="/picture/chap3/像塔.glb" />
+            <span className={styles.exhibit3Caption}>莫高窟第96窟 北大像与九层塔建模还原</span>
           </div>
           <div className={styles.exhibit3Text}>
             <p className={styles.exhibit3TextContent}>
@@ -810,6 +882,7 @@ export default function Chapter3() {
           <div className={styles.exhibit4Bottom}>
             <div ref={exhibit4Section2Ref} className={styles.exhibit4BottomLeft}>
               <ModelViewer key="model-bailang" modelPath="/picture/chap3/白狼建模.glb" />
+              <span className={styles.exhibit3Caption}>莫高窟第321窟 "祥瑞白狼"建模还原</span>
             </div>
             <div ref={exhibit4Section3Ref} className={styles.exhibit4BottomRight}>
               <div className={styles.exhibit4TextContent}>
@@ -825,20 +898,104 @@ export default function Chapter3() {
         </div>
       </div>
 
-      {/* 展项5 - 217窟（暂时注释，不在网页上显示）
+      {/* 展项5 - 217窟 */}
       <div ref={exhibit5Ref} className={styles.exhibit5}>
         <div className={styles.exhibit5Content}>
-          <div ref={exhibit5TextRef} className={styles.exhibit5TopText}>
-            <h3 className={styles.exhibit5Title}>在获得权势之后，阴家开凿了217窟</h3>
-          </div>
-          <div className={styles.exhibit5Bottom}>
-            <div className={styles.exhibit5Placeholder}>
-              <span className={styles.exhibit5PlaceholderText}>内容占位符</span>
+          <h3 className={styles.exhibit5Title}>在获得权势之后，阴家开凿了217窟</h3>
+          <div ref={exhibit5TextRef} className={styles.exhibit5Body}>
+            <div className={styles.exhibit5Left}>
+              <div key={compassDirection} className={styles.exhibit5FadeIn}>
+              {compassDirection === '北' ? (
+                <img
+                  src="/picture/chap3/217窟北壁壁画.jpg"
+                  alt="217窟北壁壁画"
+                  className={styles.exhibit5LeftImage}
+                />
+              ) : compassDirection === '东' ? (
+                <img
+                  src="/picture/chap3/217窟东壁壁画.jpg"
+                  alt="217窟东壁壁画"
+                  className={styles.exhibit5LeftImage}
+                />
+              ) : compassDirection === '南' ? (
+                <img
+                  src="/picture/chap3/217窟南壁壁画.jpg"
+                  alt="217窟南壁壁画"
+                  className={styles.exhibit5LeftImage}
+                />
+              ) : compassDirection === '西' ? (
+                <div className={styles.exhibit5LeftDual}>
+                  <div className={styles.exhibit5LeftDualMain}>
+                    <img
+                      src="/picture/chap3/217窟供养人.PNG"
+                      alt="217窟供养人"
+                      className={styles.exhibit5LeftImage}
+                    />
+                  </div>
+                  <div className={styles.exhibit5LeftDualSide}>
+                    <img
+                      src="/picture/chap3/名族志1.png"
+                      alt="名族志"
+                      className={styles.exhibit5LeftImage}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <span className={styles.exhibit5PlaceholderText}>内容占位符</span>
+              )}
+              </div>
+            </div>
+            <div className={styles.exhibit5Right}>
+              <div className={styles.exhibit5RightTop}>
+                <div key={compassDirection} className={styles.exhibit5FadeIn}>
+                {compassDirection === '北' ? (
+                  <div className={styles.exhibit5RightTopText}>
+                    <p>217窟北壁所绘《观无量寿经变》突破隋代范式，开创盛唐通行的通壁大画形制。画面中心为阿弥陀佛净土，主尊安坐莲台，两侧菩萨环侍，上方殿宇楼阁错落，钟台、经台分列左右，布局规整雅致。</p>
+                    <p>壁画西侧上部绘灵鹫山说法图景，适度挤占部分壁面，使得"未生怨"情节顺势下移，与东侧"十六观"自然衔接。西侧依次展现宫廷政变、探监、佛为说法等故事；东侧则描绘韦提希夫人观日、观水等十六种观想场景，构图布局精巧，叙事层次分明，充分展现了盛唐敦煌壁画纯熟的绘画技艺与成熟的图像范式。</p>
+                  </div>
+                ) : compassDirection === '西' ? (
+                  <div className={styles.exhibit5RightTopText}>
+                    <p>《敦煌名族志》是记录敦煌地区望族世系与官爵履历的唐代文书，是研究河西地区豪族史的重要史料。文书中阴氏部分得以完整保留，系统著录了其家族阴稠一支数代子孙的仕宦经历与人物品评，标志着阴氏在边疆军政势力的鼎盛。</p>
+                    <p>结合窟内供养人题记与此文书的详细记录，学者得以确认217窟的主要供养人正出自阴氏家族，从而将这座盛唐时期艺术成就卓著的洞窟与河西望族的营窟活动直接相连，揭示出一个豪门世族如何以信仰奉献为载体，将家族的权势荣光镌刻于石壁之上。</p>
+                    <p>阴氏族人阴嗣琼、阴嗣玉等人在神龙至景龙年间对217窟进行重修，主室西龛北力士台南壁的原供养人画像被覆盖，现在尤可辨认表层与底层的壁画。这次重修，可能是阴氏家族面对武周退位、李唐恢复顺势做出的调整。</p>
+                  </div>
+                ) : compassDirection === '南' ? (
+                  <div className={styles.exhibit5RightTopText}>
+                    <p>窟中南壁西侧以连环画式构图，铺陈佛陀波利于五台山感遇文殊菩萨的传奇情节，既是经变序幕，也是敦煌早期五台山信仰的珍贵遗存。画面以细腻线条勾勒山峦，辅以石青、石绿晕染层次，草木藤蔓刻画精巧，营造出可居可游的山水意境，尽显盛唐自然审美对宗教艺术的浸润。</p>
+                  </div>
+                ) : compassDirection === '东' ? (
+                  <div className={styles.exhibit5RightTopText}>
+                    <p>第217窟东壁门南北两侧的观音经变，是敦煌现存最早的完整独立观音经变之一，确立了后世数百年观音图像的叙事范式。</p>
+                  </div>
+                ) : (
+                  <span className={styles.exhibit5PlaceholderText}>内容占位符</span>
+                )}
+                </div>
+              </div>
+              <div className={styles.exhibit5RightBottom}>
+                <svg
+                  className={styles.compass}
+                  ref={compassRef}
+                  viewBox="-110 -110 220 220"
+                  onMouseDown={handleCompassDragStart}
+                  onTouchStart={handleCompassDragStart}
+                >
+                  <circle cx="0" cy="0" r="100" fill="none" stroke="rgba(139,119,101,0.5)" strokeWidth="1.5" />
+                  <text x="0" y="-80" textAnchor="middle" dominantBaseline="auto" fontSize="13" fill="#1a1a1a" fontFamily="'Noto Serif SC', serif">北</text>
+                  <text x="85" y="5" textAnchor="middle" dominantBaseline="central" fontSize="13" fill="#1a1a1a" fontFamily="'Noto Serif SC', serif">东</text>
+                  <text x="0" y="90" textAnchor="middle" dominantBaseline="auto" fontSize="13" fill="#1a1a1a" fontFamily="'Noto Serif SC', serif">南</text>
+                  <text x="-85" y="5" textAnchor="middle" dominantBaseline="central" fontSize="13" fill="#1a1a1a" fontFamily="'Noto Serif SC', serif">西</text>
+                  <g ref={compassNeedleRef}>
+                    <polygon points="0,-85 -4,8 4,8" fill="#8B2500" />
+                    <polygon points="0,85 -4,-8 4,-8" fill="rgba(139,119,101,0.35)" />
+                    <circle cx="0" cy="0" r="4" fill="#8B2500" />
+                  </g>
+                </svg>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      */}
 
       {/* 展项6 - 报恩君亲 */}
       <div ref={exhibit6Ref} className={styles.exhibit6}>
@@ -879,12 +1036,11 @@ export default function Chapter3() {
 
       {/* 展项7 - 新展项 */}
       <div ref={exhibit7Ref} className={styles.exhibit7}>
-        {/* 左上角交互点和文本（文本占位符暂时注释，不在网页上显示） */}
+        {/* 左上角文本 */}
         <div className={styles.exhibit7TopLeftContainer}>
-          <Hotspot ref={exhibit7TopLeftHotspotRef} inline />
-          {/* <div ref={exhibit7TopLeftTextRef} className={styles.exhibit7TextPlaceholder}>
-            文本占位符
-          </div> */}
+          <p className={styles.exhibit7TopLeftText}>
+            吐蕃仿唐制建立"告身"制度，以不同材质区分官员等级。这些金属牌饰穿缀于服饰之上，是显示身份地位的标志性物品。阴氏家族中出任蕃朝官职者，当拥有此类告身。
+          </p>
         </div>
 
         {/* 中间五个图片 */}
@@ -1094,13 +1250,6 @@ export default function Chapter3() {
       </div>
 
       {/* 展品面板 */}
-      <ExhibitPanel
-        title={exhibits.baoYuJing.title}
-        subtitle={exhibits.baoYuJing.subtitle}
-        description={exhibits.baoYuJing.description}
-        visible={activePanel === 'baoYuJing'}
-        onClose={() => setActivePanel(null)}
-      />
       <ExhibitPanel
         title={exhibits.baoEnJunQin.title}
         subtitle={exhibits.baoEnJunQin.subtitle}

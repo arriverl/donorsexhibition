@@ -672,7 +672,7 @@ export default function Chapter2() {
             </div>
           ) : (
             <div className={styles.marriageFamilyTop}>
-              <div className={styles.marriageFamilyTitle}>曹氏归义军联姻家族</div>
+              <div className={styles.marriageFamilyTitle}></div>
             </div>
           )}
           <div ref={marriageFamilyBottomRef} className={styles.marriageFamilyBottomViewport}>
