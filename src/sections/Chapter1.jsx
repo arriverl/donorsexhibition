@@ -319,7 +319,7 @@ export default function Chapter1() {
           {/* 单元标题：初始在左侧，随供养菩萨像缩小时淡出 */}
           <img
             ref={g1TitleRef}
-            src="/picture/chap1/单元标题1.PNG?v=3"
+            src="public\picture\chap1\单元标题1.PNG"
             alt="第一单元标题"
             className={styles.g1Title}
           />

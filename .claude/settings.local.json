@@ -29,7 +29,8 @@
       "Bash(npx -p playwright -c \"node -e \\\\\"console.log\\(require.resolve\\('playwright'\\)\\)\\\\\"\")",
       "Bash(node --check f:/donorsexhibition/src/sections/Chapter4.jsx)",
       "Bash(xxd)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5174/)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5174/)",
+      "Bash(grep -E \"\\\\.\\(glb|gltf\\)$\")"
     ]
   }
 }
