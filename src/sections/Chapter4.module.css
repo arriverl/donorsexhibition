@@ -136,7 +136,7 @@
   justify-content: center;
   align-items: center;
   padding: 4rem 2rem;
-  margin-bottom: 5rem;
+  margin-bottom: 6rem;
   overflow: visible;
 }
 
@@ -224,9 +224,8 @@
 
 /* 宝藏列表 */
 .treasuresList {
-  position: absolute;
-  left: 0;
-  top: 120%;
+  position: relative;
+  margin-top: 2.5rem;
   background: rgba(255, 255, 255, 0.6);
   padding: 3rem 4rem;
   border-radius: 1.25rem;
@@ -245,12 +244,10 @@
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    max-height: 0;
     transform: translateY(-20px) scale(0.98);
   }
   to {
     opacity: 1;
-    max-height: 700px;
     transform: translateY(0) scale(1);
   }
 }
@@ -295,7 +292,7 @@
 /* 展项之间的分隔 */
 .exhibitDivider {
   width: 100%;
-  height: 20vh;
+  height: 30vh;
   background: #E2D2B8;
 }
 
@@ -485,9 +482,30 @@
   height: calc(100vh - 6rem);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-top: 4rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(139,119,101,0.4) transparent;
   color: var(--color-text, #1a1a1a);
   transition: opacity 0.8s cubic-bezier(0.32, 0.72, 0, 1), transform 0.8s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.rightTextArea::-webkit-scrollbar {
+  width: 4px;
+}
+
+.rightTextArea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.rightTextArea::-webkit-scrollbar-thumb {
+  background: rgba(139,119,101,0.4);
+  border-radius: 2px;
+}
+
+.rightTextArea::-webkit-scrollbar-thumb:hover {
+  background: rgba(139,119,101,0.6);
 }
 
 /* 默认文本样式 */
