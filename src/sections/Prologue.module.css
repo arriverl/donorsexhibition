@@ -228,39 +228,57 @@
 /* Mobile */
 @media (max-width: 768px) {
   .wheel {
-    --wheel-radius: 550px;
-    left: calc(80px - var(--wheel-radius));
+    --wheel-radius: min(550px, 90vw);
+    left: calc(40px - var(--wheel-radius));
   }
 
   .active .period {
-    font-size: 3rem;
+    font-size: clamp(2rem, 8vw, 3rem);
   }
 
   .period {
-    font-size: 1.5rem;
+    font-size: clamp(1.2rem, 4vw, 1.5rem);
   }
 
   .content {
-    padding-left: 20px;
-    gap: 15px;
+    padding-left: 16px;
+    gap: 12px;
   }
 
   .cavesList {
-    max-width: 180px;
-    font-size: 0.85rem;
+    max-width: min(180px, 45vw);
+    font-size: 0.8rem;
   }
 
   .cave {
-    width: 24px;
-    height: 38px;
+    width: 22px;
+    height: 34px;
   }
 
   .caveLabel {
-    font-size: 0.45rem;
+    font-size: 0.42rem;
   }
 
   .crossSection {
     gap: 2px;
     padding: 0 3vw 20px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 480px) {
+  .wheel {
+    --wheel-radius: min(420px, 95vw);
+    left: calc(20px - var(--wheel-radius));
+  }
+
+  .contentIntro {
+    width: min(31em, 92vw);
+    font-size: clamp(1rem, 4.5vw, 1.35rem);
+  }
+
+  .content {
+    padding-left: 12px;
   }
 }

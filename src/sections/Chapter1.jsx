@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { scrollPinEnd, isMobileViewport } from '../utils/mobile'
 import Hotspot from '../components/Hotspot'
 import ExhibitPanel from '../components/ExhibitPanel'
 import ImagePlaceholder from '../components/ImagePlaceholder'
@@ -130,6 +131,7 @@ export default function Chapter1() {
   }
 
   useEffect(() => {
+    const isMobile = isMobileViewport()
     const ctx = gsap.context(() => {
       // === Group 1: Bodhisattva 大图居中 → 缩小移左 + 文字上浮 ===
       // 初始：图片放大到跨两屏，平移到屏幕中央；文字在底部外
@@ -144,7 +146,7 @@ export default function Chapter1() {
         scrollTrigger: {
           trigger: g1SceneRef.current,
           start: 'top top',
-          end: '+=500%',
+          end: scrollPinEnd(500),
           pin: true,
           scrub: 1,
         },
@@ -161,7 +163,7 @@ export default function Chapter1() {
         scrollTrigger: {
           trigger: g2WalkSceneRef.current,
           start: 'top top',
-          end: '+=300%',
+          end: scrollPinEnd(300),
           pin: true,
           scrub: 1,
         },
@@ -187,7 +189,7 @@ export default function Chapter1() {
         scrollTrigger: {
           trigger: g2CarouselSceneRef.current,
           start: 'top top',
-          end: '+=1000%',
+          end: scrollPinEnd(1000),
           pin: true,
           scrub: 1,
           invalidateOnRefresh: true,
@@ -248,7 +250,7 @@ export default function Chapter1() {
         scrollTrigger: {
           trigger: g3SectionRef.current,
           start: 'top top',
-          end: '+=500%',
+          end: scrollPinEnd(500),
           pin: true,
           scrub: 1,
         },
@@ -274,20 +276,29 @@ export default function Chapter1() {
         )
         .to(g3VowHotspotRef.current, { opacity: 1, duration: 0.3 })
         .to({}, { duration: 0.3 }) // 发愿文停留
-        // 3. 既有流程：发愿文飞入题记图片位置
-        .to(g3DonorImgRef.current, { opacity: 1, y: 0, duration: 0.6 }, '>')
-        .to(g3VowRef.current, {
-          x: () => g3VowImgRef.current.getBoundingClientRect().left - g3VowRef.current.getBoundingClientRect().left,
-          y: () => g3VowImgRef.current.getBoundingClientRect().top - g3VowRef.current.getBoundingClientRect().top,
-          scale: 0.3,
-          opacity: 0,
-          duration: 1.2,
-          ease: 'power2.inOut',
-        }, '>')
-        .to(g3DonorImgRef.current, { y: -40, duration: 1.2, ease: 'none' }, '<')
-        .to(g3VowImgRef.current, { opacity: 1, y: 0, duration: 0.6 }, '<0.3')
-        .to(g3DonorImgRef.current, { y: -80, duration: 0.6, ease: 'none' }, '<')
-        .to([g3Hotspot1Ref.current, g3Hotspot2Ref.current, g3Hotspot3Ref.current], { opacity: 1, duration: 0.4 }, '>')
+
+      if (isMobile) {
+        g3tl
+          .to(g3DonorImgRef.current, { opacity: 1, y: 0, duration: 0.6 })
+          .to(g3VowRef.current, { opacity: 0, duration: 0.5 }, '<')
+          .to(g3VowImgRef.current, { opacity: 1, y: 0, duration: 0.6 }, '<0.2')
+          .to([g3Hotspot1Ref.current, g3Hotspot2Ref.current, g3Hotspot3Ref.current], { opacity: 1, duration: 0.4 }, '>')
+      } else {
+        g3tl
+          .to(g3DonorImgRef.current, { opacity: 1, y: 0, duration: 0.6 }, '>')
+          .to(g3VowRef.current, {
+            x: () => g3VowImgRef.current.getBoundingClientRect().left - g3VowRef.current.getBoundingClientRect().left,
+            y: () => g3VowImgRef.current.getBoundingClientRect().top - g3VowRef.current.getBoundingClientRect().top,
+            scale: 0.3,
+            opacity: 0,
+            duration: 1.2,
+            ease: 'power2.inOut',
+          }, '>')
+          .to(g3DonorImgRef.current, { y: -40, duration: 1.2, ease: 'none' }, '<')
+          .to(g3VowImgRef.current, { opacity: 1, y: 0, duration: 0.6 }, '<0.3')
+          .to(g3DonorImgRef.current, { y: -80, duration: 0.6, ease: 'none' }, '<')
+          .to([g3Hotspot1Ref.current, g3Hotspot2Ref.current, g3Hotspot3Ref.current], { opacity: 1, duration: 0.4 }, '>')
+      }
 
       if (g3CardsRef.current) {
         gsap.fromTo(

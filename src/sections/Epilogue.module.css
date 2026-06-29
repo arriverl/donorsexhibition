@@ -120,7 +120,8 @@
   box-shadow: 0 2px 12px rgba(139, 90, 43, 0.25);
 }
 
-.unlockBtn:hover {
+.unlockBtn:hover,
+.unlockBtn:active {
   background: rgba(139, 90, 43, 1);
   border-color: #c9a227;
   box-shadow: 0 4px 20px rgba(201, 162, 39, 0.35);
@@ -151,9 +152,14 @@
   }
 
   .unlockBtn {
-    bottom: 1.5rem;
+    bottom: max(1.5rem, env(safe-area-inset-bottom, 1.5rem));
     right: 1.5rem;
     font-size: 0.9rem;
     padding: 0.65em 1.2em;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .watermark {
+    font-size: clamp(10rem, 38vw, 18rem);
   }
 }

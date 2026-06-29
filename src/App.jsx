@@ -39,7 +39,7 @@ export default function App() {
     if (!loaded || !entered) {
       html.style.overflow = 'hidden'
       body.style.overflow = 'hidden'
-      body.style.height = '100vh'
+      body.style.height = '100dvh'
     } else {
       html.style.overflow = ''
       body.style.overflow = ''
@@ -51,6 +51,22 @@ export default function App() {
       body.style.height = ''
     }
   }, [loaded, entered])
+
+  // 横竖屏切换 / 窗口缩放时刷新 ScrollTrigger 布局
+  useEffect(() => {
+    let timer
+    const refresh = () => {
+      clearTimeout(timer)
+      timer = setTimeout(() => ScrollTrigger.refresh(), 200)
+    }
+    window.addEventListener('resize', refresh)
+    window.addEventListener('orientationchange', refresh)
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener('resize', refresh)
+      window.removeEventListener('orientationchange', refresh)
+    }
+  }, [entered, loaded, chapter4Unlocked])
 
   const handleEnter = useCallback(() => {
     // 解锁滚动

@@ -31,6 +31,7 @@ export default function ModelViewer({ modelPath }) {
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
     renderer.setSize(width, height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderer.domElement.style.touchAction = 'none'
     container.appendChild(renderer.domElement)
 
     // 鼠标交互：拖动旋转（不抢页面滚动）

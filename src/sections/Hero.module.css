@@ -1,0 +1,110 @@
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  min-height: 100dvh;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-end;
+  overflow: hidden;
+  background-color: #e2d2b8;
+}
+
+.heroVisual {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.heroImg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.enterWrap {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  padding: 0 1.25rem;
+  padding-bottom: calc(12% + env(safe-area-inset-bottom, 0));
+  text-align: center;
+}
+
+.enterBtn {
+  width: 100%;
+  max-width: 280px;
+  padding: 1rem 2rem;
+  font-size: clamp(1rem, 4vw, 1.25rem);
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.enterBtn:hover,
+.enterBtn:focus-visible {
+  background-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.enterBtn:active {
+  transform: translateY(0);
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* 竖屏手机：完整显示横幅标题，不裁切左右书法 */
+@media (max-width: 768px) {
+  .hero {
+    justify-content: flex-end;
+  }
+
+  .heroImg {
+    object-fit: contain;
+    object-position: center top;
+  }
+
+  .enterWrap {
+    padding-bottom: calc(6% + env(safe-area-inset-bottom, 0));
+    margin-top: auto;
+  }
+
+  .enterBtn {
+    max-width: none;
+    padding: 0.85rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .enterWrap {
+    padding-bottom: calc(5% + env(safe-area-inset-bottom, 0));
+  }
+
+  .enterBtn {
+    font-size: 0.95rem;
+    letter-spacing: 0.1em;
+  }
+}
+
+/* 横屏手机：略放大人物区 */
+@media (max-width: 926px) and (orientation: landscape) {
+  .heroImg {
+    object-fit: cover;
+    object-position: center 55%;
+  }
+}

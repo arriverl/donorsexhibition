@@ -3,6 +3,7 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Hotspot from '../components/Hotspot'
 import ExhibitPanel from '../components/ExhibitPanel'
+import { scrollPinEnd } from '../utils/mobile'
 import styles from './Chapter2.module.css'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -139,7 +140,7 @@ export default function Chapter2() {
         scrollTrigger: {
           trigger: openingSceneRef.current,
           start: 'top top',
-          end: '+=400%',
+          end: scrollPinEnd(400),
           pin: true,
           scrub: 1,
           pinSpacing: true,
@@ -204,7 +205,7 @@ export default function Chapter2() {
           scrollTrigger: {
             trigger: zhangYinSectionRef.current,
             start: 'top top',
-            end: '+=500%',
+            end: scrollPinEnd(500),
             pin: true,
             scrub: 1,
             pinSpacing: true,
@@ -306,7 +307,7 @@ export default function Chapter2() {
           scrollTrigger: {
             trigger: marriageFamilySectionRef.current,
             start: 'top top',
-            end: '+=500%',
+            end: scrollPinEnd(500),
             pin: true,
             pinSpacing: true,
             scrub: 1,

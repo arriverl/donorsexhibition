@@ -71,12 +71,14 @@ body {
   line-height: 2;
 }
 
-/* Hero */
+/* Hero — 不受 .section 内边距影响 */
 .section--hero {
-  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  padding: 0;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
+  justify-content: flex-end;
   text-align: center;
 }
 
@@ -179,4 +181,52 @@ body {
   font-size: 0.875rem;
   color: var(--color-text-muted);
   letter-spacing: 0.1em;
+}
+
+/* ── Mobile global ── */
+@media (max-width: 768px) {
+  :root {
+    --section-padding-y: 6vh;
+    --section-padding-x: 5vw;
+  }
+
+  html {
+    font-size: 15px;
+  }
+
+  .section {
+    min-height: 100svh;
+    min-height: 100dvh;
+    padding-top: max(var(--section-padding-y), 3rem);
+  }
+
+  .section--hero {
+    min-height: 100svh;
+    min-height: 100dvh;
+    padding: 0;
+  }
+
+  .section__text {
+    max-width: 100%;
+    line-height: 1.85;
+  }
+
+  .preloader__content {
+    width: min(80vw, 240px);
+  }
+
+  .hotspot {
+    width: 52px !important;
+    height: 52px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --section-padding-x: 4vw;
+  }
+
+  html {
+    font-size: 14px;
+  }
 }

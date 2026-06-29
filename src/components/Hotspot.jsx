@@ -24,6 +24,7 @@ const Hotspot = forwardRef(function Hotspot(
         zIndex: 10,
         padding: 0,
         outline: 'none',
+        WebkitTapHighlightColor: 'transparent',
         transformOrigin: 'center center',
         willChange: 'transform, opacity',
       }}

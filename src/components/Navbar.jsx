@@ -2,18 +2,27 @@ import { useState, useEffect, useRef } from 'react'
 import styles from './Navbar.module.css'
 
 const navItems = [
-  { id: 'hero', label: '首页' },
-  { id: 'prologue', label: '序章' },
-  { id: 'chapter-1', label: '第一单元' },
-  { id: 'chapter-2', label: '第二单元' },
-  { id: 'chapter-3', label: '第三单元' },
-  { id: 'epilogue', label: '结语' },
-  { id: 'chapter-4', label: '了解更多' },
+  { id: 'hero', label: '首页', shortLabel: '首页' },
+  { id: 'prologue', label: '序章', shortLabel: '序章' },
+  { id: 'chapter-1', label: '第一单元', shortLabel: '一' },
+  { id: 'chapter-2', label: '第二单元', shortLabel: '二' },
+  { id: 'chapter-3', label: '第三单元', shortLabel: '三' },
+  { id: 'epilogue', label: '结语', shortLabel: '结语' },
+  { id: 'chapter-4', label: '了解更多', shortLabel: '更多' },
 ]
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState('hero')
+  const [isCompact, setIsCompact] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth <= 480 : false
+  )
   const isNavigating = useRef(false)
+
+  useEffect(() => {
+    const onResize = () => setIsCompact(window.innerWidth <= 480)
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
 
   const handleNavClick = (e, sectionId) => {
     e.preventDefault()
@@ -86,7 +95,7 @@ export default function Navbar() {
               className={`${styles.navLink} ${activeSection === item.id ? styles.navLinkActive : ''}`}
               onClick={(e) => handleNavClick(e, item.id)}
             >
-              {item.label}
+              {isCompact ? item.shortLabel : item.label}
             </a>
           </li>
         ))}
