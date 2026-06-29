@@ -67,7 +67,8 @@ export default function Chapter2() {
   const zhangContainerRef = useRef(null)
   const zhangHotspotRef = useRef(null)
   const yinLadyRef = useRef(null)
-  const yinLadySectionRef = useRef(null)
+  const yinLadyWrapRef = useRef(null)
+  const zhangYinSectionRef = useRef(null)
   const yinLadyHotspotRef = useRef(null)
   const caoLadyContainerRef = useRef(null)
   const caoLadyDocRef = useRef(null)
@@ -190,108 +191,53 @@ export default function Chapter2() {
           ease: 'power2.in'
         })
 
-      // 历史文本渐入动画（页面解锁后立即显示）
-      if (historyTextRef.current) {
-        gsap.fromTo(
-          historyTextRef.current,
-          {
-            opacity: 0,
-            y: 30,
-          },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1.2,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: historyTextRef.current,
-              start: 'bottom 100%',
-              end: 'bottom 80%',
-              scrub: 1,
-            },
-          }
-        )
-      }
+      // 张议潮 + 阴氏郡君太夫人 合并展项：pin → 文本浮现 → 张议潮浮现 → 郡君夫人从右侧走入左侧
+      if (zhangYinSectionRef.current && zhangContainerRef.current && yinLadyWrapRef.current && yinLadyHotspotRef.current) {
+        gsap.set(historyTextRef.current, { opacity: 0, y: 20 })
+        gsap.set(zhangContainerRef.current, { y: 150, opacity: 0 })
+        gsap.set(yinLadyWrapRef.current, { x: () => window.innerWidth, opacity: 0 })
+        gsap.set(yinLadyHotspotRef.current, { opacity: 0, scale: 0.5 })
 
-      // 张议潮图片随滚动下划浮现（在文本完全显示后）
-      if (zhangContainerRef.current && historyTextRef.current) {
-        gsap.fromTo(
-          zhangContainerRef.current,
-          {
-            y: 150,
-            opacity: 0,
-          },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 1.5,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: historyTextRef.current,
-              start: 'bottom 100%',
-              end: 'bottom 60%',
-              scrub: 1,
-            },
-          }
-        )
-      }
+        let yinHotspotShown = false
 
-      // 阴氏郡君太夫人走动动画（从右向左跨越整个屏幕，完全可见）
-      if (yinLadyRef.current && yinLadySectionRef.current && yinLadyHotspotRef.current) {
-        // 初始隐藏交互点
-        gsap.set(yinLadyHotspotRef.current, {
-          opacity: 0,
-          scale: 0.5
+        const zhangYinTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: zhangYinSectionRef.current,
+            start: 'top top',
+            end: '+=500%',
+            pin: true,
+            scrub: 1,
+            pinSpacing: true,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              if (!yinHotspotShown && self.progress >= 0.9) {
+                yinHotspotShown = true
+                gsap.to(yinLadyHotspotRef.current, {
+                  opacity: 1,
+                  scale: 1,
+                  duration: 0.3,
+                  ease: 'back.out(1.7)'
+                })
+              }
+            },
+          },
         })
 
-        // 标志，确保交互点只显示一次
-        let hotspotShown = false
+        zhangYinTl
+          // 历史文本浮现
+          .to(historyTextRef.current, { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out' })
+          // 张议潮浮现
+          .to(zhangContainerRef.current, { y: 0, opacity: 1, duration: 1.5, ease: 'power2.out' })
+          // 阴氏郡君太夫人从右侧走入左侧
+          .to(yinLadyWrapRef.current, { x: 0, opacity: 1, duration: 3, ease: 'none' })
+          // 短暂停留
+          .to({}, { duration: 0.5 })
 
-        // 同步创建 pin ScrollTrigger，保证后续展项（marriageFamily）能正确计算 600vh 的 pinSpacer
-        gsap.fromTo(
-          yinLadyRef.current,
-          {
-            x: () => Math.max(0, window.innerWidth - (yinLadyRef.current?.offsetWidth || 0)),
-            opacity: 1,
-          },
-          {
-            x: 0,
-            opacity: 1,
-            duration: 3,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: yinLadySectionRef.current,
-              start: 'top top',
-              end: '+=600%',
-              pin: true,
-              scrub: 1,
-              pinSpacing: true,
-              invalidateOnRefresh: true,
-              // 监听进度，动画接近完成时显示交互点
-              onUpdate: (self) => {
-                if (!hotspotShown && self.progress >= 0.98) {
-                  hotspotShown = true
-                  const imageWidth = yinLadyRef.current?.offsetWidth || 0
-                  const hotspotTop = '20vh'
-                  const hotspotLeft = `${imageWidth * 0.8}px`
-                  gsap.set(yinLadyHotspotRef.current, { top: hotspotTop, left: hotspotLeft })
-                  gsap.to(yinLadyHotspotRef.current, {
-                    opacity: 1,
-                    scale: 1,
-                    duration: 0.3,
-                    ease: 'back.out(1.7)'
-                  })
-                }
-              },
-            },
-          }
-        )
-
-        // 图片加载完成后刷新一次，让 from 的 x 起点按真实宽度重算
+        // 图片加载完成后刷新
         const refreshOnLoad = () => ScrollTrigger.refresh()
-        if (yinLadyRef.current.complete) {
+        if (yinLadyRef.current?.complete) {
           refreshOnLoad()
-        } else {
+        } else if (yinLadyRef.current) {
           yinLadyRef.current.addEventListener('load', refreshOnLoad, { once: true })
         }
       }
@@ -471,25 +417,14 @@ export default function Chapter2() {
         />
       </div>
 
-      {/* Content area */}
-      <div className="section section--chapter-2 relative" style={{ minHeight: '180vh', padding: '0 var(--section-padding-x)' }}>
-        <div className="section__inner relative" style={{ zIndex: 20, position: 'relative', paddingTop: '2vh' }}>
-          <div ref={historyTextRef} className={styles.historyText}>
-            <p>大中二年，沙州豪杰张议潮举义旗，逐吐蕃，复河西，归义军由此而立。阴氏家族则以三代联姻，步步为营。先与张议潮家族结为姻亲，再与曹氏归义军世代通婚，先为内亲，后成母族。石窟，不惟礼佛，亦是家谱。</p>
-          </div>
+      {/* 张议潮 + 阴氏郡君太夫人 walk-in（合并展项） */}
+      <div ref={zhangYinSectionRef} style={{ position: 'relative', height: '100vh', overflow: 'hidden' }}>
+        {/* 历史文本 - 置于合并区域顶部 */}
+        <div ref={historyTextRef} className={styles.historyText} style={{ position: 'absolute', top: '10vh', left: 0, right: 0, zIndex: 20 }}>
+          <p>大中二年，沙州豪杰张议潮举义旗，逐吐蕃，复河西，归义军由此而立。阴氏家族则以三代联姻，步步为营。先与张议潮家族结为姻亲，再与曹氏归义军世代通婚，先为内亲，后成母族。石窟，不惟礼佛，亦是家谱。</p>
         </div>
-
-        {/* 图片容器 */}
-        <div
-          ref={zhangContainerRef}
-          style={{
-            position: 'absolute',
-            bottom: '0vh',
-            right: '5vw',
-            width: '50vw',
-            maxWidth: 'none',
-            zIndex: 10
-          }}>
+        {/* 张议潮 - 右侧 */}
+        <div ref={zhangContainerRef} style={{ position: 'absolute', bottom: '0vh', right: '5vw', width: '50vw', maxWidth: 'none', zIndex: 10 }}>
           <div style={{ position: 'relative', width: '100%' }}>
             <img
               src="/picture/chap2/张议潮及其儿子女婿（抠图）.PNG"
@@ -501,7 +436,6 @@ export default function Chapter2() {
                 filter: 'drop-shadow(0 10px 30px rgba(0,0,0,0.15))'
               }}
             />
-            {/* 交互点 */}
             <Hotspot
               ref={zhangHotspotRef}
               x={15}
@@ -509,8 +443,6 @@ export default function Chapter2() {
               active={activePanel === 'zhangYichao'}
               onClick={() => togglePanel('zhangYichao')}
             />
-
-            {/* 张议潮展品面板 */}
             <ExhibitPanel
               title={exhibits.zhangYichao.title}
               subtitle={exhibits.zhangYichao.subtitle}
@@ -520,34 +452,29 @@ export default function Chapter2() {
             />
           </div>
         </div>
-      </div>
-
-      {/* 阴氏郡君太夫人走动区域 - 在张议潮图片下方 */}
-      <div ref={yinLadySectionRef} className="section section--chapter-2 relative" style={{ minHeight: '100vh', height: '100vh', overflow: 'hidden' }}>
-        <img
-          ref={yinLadyRef}
-          src="/picture/chap2/阴氏郡君太夫人（抠图）.PNG"
-          alt="阴氏郡君太夫人"
-          style={{
-            position: 'absolute',
-            top: '15vh',
-            left: 0,
-            width: 'auto',
-            height: '70vh',
-            objectFit: 'contain',
-            filter: 'drop-shadow(0 5px 20px rgba(0,0,0,0.15))'
-          }}
-        />
-        {/* 交互点 - 在图像右上方，位置在动画结束后动态设置 */}
-        <div ref={yinLadyHotspotRef} style={{ position: 'absolute', zIndex: 30 }}>
-          <Hotspot
-            x={0}
-            y={0}
-            active={activePanel === 'yinLady'}
-            onClick={() => togglePanel('yinLady')}
+        {/* 阴氏郡君太夫人 - 从右侧走入，站定在张议潮左边 */}
+        <div ref={yinLadyWrapRef} style={{ position: 'absolute', top: '30vh', left: 0, height: '70vh', width: 'auto' }}>
+          <img
+            ref={yinLadyRef}
+            src="/picture/chap2/阴氏郡君太夫人（抠图）.PNG"
+            alt="阴氏郡君太夫人"
+            style={{
+              height: '100%',
+              width: 'auto',
+              objectFit: 'contain',
+              display: 'block',
+              filter: 'drop-shadow(0 5px 20px rgba(0,0,0,0.15))'
+            }}
           />
+          <div ref={yinLadyHotspotRef} style={{ position: 'absolute', inset: 0 }}>
+            <Hotspot
+              x={80}
+              y={20}
+              active={activePanel === 'yinLady'}
+              onClick={() => togglePanel('yinLady')}
+            />
+          </div>
         </div>
-        {/* 阴氏郡君展品面板 */}
         <ExhibitPanel
           title={exhibits.yinLady.title}
           subtitle={exhibits.yinLady.subtitle}

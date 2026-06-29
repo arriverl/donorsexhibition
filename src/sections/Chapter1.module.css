@@ -49,6 +49,49 @@
   height: 100%;
 }
 
+.g1HotspotImg {
+  position: absolute;
+  left: 72%;
+  top: 18%;
+  transform: translate(-50%, -50%);
+  height: 18vh;
+  width: auto;
+  cursor: pointer;
+  z-index: 10;
+  transition: box-shadow 0.3s;
+  will-change: transform, opacity;
+}
+
+.g1HotspotImg:hover {
+  border-color: rgba(139,94,42,0.8);
+  box-shadow: 0 0 12px rgba(139,94,42,0.4);
+}
+
+.g1HotspotImgActive {
+  border-color: rgba(139,94,42,0.8);
+  box-shadow: 0 0 12px rgba(139,94,42,0.4);
+}
+
+/* 图片交互点（通用） */
+.hotspotImg {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  height: 18vh;
+  width: auto;
+  cursor: pointer;
+  z-index: 10;
+  transition: box-shadow 0.3s;
+  will-change: transform, opacity;
+}
+
+.hotspotImg:hover {
+  box-shadow: 0 0 12px rgba(139,94,42,0.4);
+}
+
+.hotspotImgActive {
+  box-shadow: 0 0 12px rgba(139,94,42,0.4);
+}
+
 .g1Text {
   position: absolute;
   top: 50%;

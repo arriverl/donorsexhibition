@@ -338,10 +338,10 @@ export default function Chapter1() {
           />
           {/* 热点（动画结束后显示） */}
           <div ref={g1HotspotRef} className={styles.g1HotspotWrap}>
-            <Hotspot
-              x={72}
-              y={18}
-              active={activePanel === 'bodhisattva'}
+            <img
+              src="/picture/chap1/菩萨题记.png"
+              alt="供养菩萨题记"
+              className={`${styles.g1HotspotImg} ${activePanel === 'bodhisattva' ? styles.g1HotspotImgActive : ''}`}
               onClick={() => togglePanel('bodhisattva')}
             />
           </div>
@@ -444,11 +444,12 @@ export default function Chapter1() {
               <p ref={g2MergeCaptionRef} className={styles.mergeCaption}>
                 贵族供养像在敦煌壁画中极为常见，其中不乏雍容华贵的女性形象，多以功德主家眷的身份出现于洞窟之中。虽然，记载中的开窟功德主大多数为男性，但若进一步追问营建一座洞窟所需的资源调度、人脉维系乃至家族决策过程，女性在其中扮演的角色未必只是陪衬。
               </p>
-              <Hotspot
+              <img
                 ref={g2MergeHotspotRef}
-                x={50}
-                y={50}
-                active={activePanel === 'governorWife'}
+                src="/picture/chap1/礼佛图复原题记.png"
+                alt="都督夫人礼佛图题记"
+                className={`${styles.hotspotImg} ${activePanel === 'governorWife' ? styles.hotspotImgActive : ''}`}
+                style={{ left: '75%', top: '30%' }}
                 onClick={() => togglePanel('governorWife')}
               />
               <ExhibitPanel
@@ -474,8 +475,8 @@ export default function Chapter1() {
               </div>
               <Hotspot
                 ref={g2KingHotspotRef}
-                x={40}
-                y={20}
+                x={45}
+                y={25}
                 active={activePanel === 'kingKhotan'}
                 onClick={() => togglePanel('kingKhotan')}
               />
@@ -497,11 +498,12 @@ export default function Chapter1() {
                 alt="第98窟 五代女供养人 (欧阳琳复原画)"
                 style={{ height: '80vh', width: 'auto', maxWidth: '50vw' }}
               />
-              <Hotspot
+              <img
                 ref={g2WomanHotspotRef}
-                x={35}
-                y={35}
-                active={activePanel === 'fiveDynastiesWoman'}
+                src="/picture/chap1/国王复原题记.png"
+                alt="五代女供养人题记"
+                className={`${styles.hotspotImg} ${activePanel === 'fiveDynastiesWoman' ? styles.hotspotImgActive : ''}`}
+                style={{ left: '35%', top: '35%' }}
                 onClick={() => togglePanel('fiveDynastiesWoman')}
               />
               <ExhibitPanel
@@ -529,7 +531,7 @@ export default function Chapter1() {
             />
             <Hotspot
               x={50}
-              y={30}
+              y={15}
               active={activePanel === 'commoner'}
               onClick={() => togglePanel('commoner')}
             />
@@ -548,7 +550,7 @@ export default function Chapter1() {
             />
             <Hotspot
               x={50}
-              y={45}
+              y={15}
               active={activePanel === 'slave'}
               onClick={() => togglePanel('slave')}
             />

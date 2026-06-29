@@ -800,8 +800,8 @@ export default function Chapter3() {
             </div>
             <Hotspot
               ref={exhibit2HotspotRef}
-              x={80}
-              y={95}
+              x={50}
+              y={110}
               active={activePanel === 'cave431'}
               onClick={() => togglePanel('cave431')}
             />
@@ -1032,8 +1032,8 @@ export default function Chapter3() {
         {/* 交互点 */}
         <Hotspot
           ref={exhibit6HotspotRef}
-          x={25}
-          y={85}
+          x={50}
+          y={90}
           active={activePanel === 'baoEnJunQin'}
           onClick={() => togglePanel('baoEnJunQin')}
         />
