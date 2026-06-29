@@ -14,6 +14,7 @@ const timelineData = [
       '透过供养人画像，我们将追寻阴氏家族的兴衰轨迹。回到千年前，凝视那些被石壁记住的身影与名字。',
     ],
   },
+  { period: '下拉查看敦煌阴氏在莫高窟留下的痕迹', notice: true },
   { period: '西魏', caves: '285窟' },
   { period: '初唐', caves: '431窟、432窟、96窟、321窟、322窟' },
   { period: '盛唐', caves: '129窟、148窟、166窟、199窟、208窟、217窟、225窟' },
@@ -138,11 +139,11 @@ export default function Prologue() {
                 >
                   <div className={styles.dot} />
                   <div
-                    className={styles.contentWrapper}
+                    className={data.notice ? `${styles.contentWrapper} ${styles.noticeWrapper}` : styles.contentWrapper}
                     ref={(el) => { wrapperRefs.current[i] = el }}
                   >
                     <div
-                      className={`${styles.content} ${data.intro ? styles.contentIntro : ''}`}
+                      className={`${styles.content} ${data.intro ? styles.contentIntro : ''} ${data.notice ? styles.contentNotice : ''}`}
                     >
                       {data.intro ? (
                         <div className={styles.intro}>
@@ -152,11 +153,13 @@ export default function Prologue() {
                         </div>
                       ) : (
                         <>
-                          <div className={styles.period}>{data.period}</div>
-                          <div className={styles.details}>
-                            <div className={styles.cavesTitle}>代表洞窟</div>
-                            <div className={styles.cavesList}>{data.caves}</div>
-                          </div>
+                          <div className={data.notice ? styles.noticePeriod : styles.period}>{data.period}</div>
+                          {!data.notice && (
+                            <div className={styles.details}>
+                              <div className={styles.cavesTitle}>代表洞窟</div>
+                              <div className={styles.cavesList}>{data.caves}</div>
+                            </div>
+                          )}
                         </>
                       )}
                     </div>

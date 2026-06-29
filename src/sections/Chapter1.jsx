@@ -59,6 +59,11 @@ const exhibits = {
     title: '阴安归',
     description: '修建洞窟的出资者，人像扎头巾，脑后露出一段头发，穿圆领窄袖袍服，颜色有红、蓝二色，袍服正中宽边到腰部，身系腰带，正中及领、袖皆有边饰，双手拢入袖中。',
   },
+  vowExhibit: {
+    title: '发愿文',
+    description:
+      '发愿文，是佛教修行中用于‌陈述誓愿、明确目标‌的文体，指修行者在修善作福之际，向佛菩萨告白内心意愿与决心的文字 。它既是个人确立修行方向的精神契约，也是法会仪轨中凝聚共愿的重要载体。\n\n发愿文大意：北魏大统四年（538年），比丘辩化为七世父母敬造佛像，祈愿亡者往生净土，生者安泰，众生皆得常乐。\n\n发愿文详意：\n那至高无上的真理本是寂静空阔的，却恰恰被尘世的烦恼罗网所束缚。\n圣者（成佛）的归向，若不靠点滴积累修行，怎能救度众生呢？\n因此，佛弟子比丘辩化，恭敬地为七世父母和今世父母，敬造迦叶佛像一尊及两尊胁侍菩萨。\n凭借这点微薄福德，祈愿亡者神识往生净土，永远脱离三恶道。\n今世在世的家人眷属，生活安泰平安吉祥。\n并将此功德普及给一切众生，愿它们快速证得涅槃常乐。\n北魏（西魏）大统四年，干支为戊午年，八月中旬建造完毕。',
+  },
 }
 
 // 第三组：横向介绍文字（先出现）与竖向发愿文（重新排列组合后出现）
@@ -67,12 +72,10 @@ const introSentences = [
   '在这批题记所记录的众多供养人之中，阴氏的名字第一次被刻入敦煌的石壁，成为这一家族与莫高窟营建活动发生关联的最早实证。',
 ]
 const vowLines = [
-  '夫至极阒旷正为尘罗所约圣遁归趣',
-  '非积垒何能济拔是以佛弟子比丘辯化仰',
-  '为七世父母所生父母敬造迎叶佛一区并二菩',
-  '萨因斯微福愿亡者神游净土永离三途现',
-  '在居眷位太安吉普及蠕动之类速登常乐',
-  '大代大魏大统四年岁次戊午八月中旬造',
+  '夫至极遐旷，正为尘罗所约；圣道归趣，非积叠何能济拔。',
+  '是以佛弟子比丘䛒化，仰为七世父母、所生母父，敬造迦叶佛一区并二菩萨。',
+  '因此微福，愿亡者神游净土，永离三途；现在居眷，位太安吉。普及蠕动之类，速登常乐。',
+  '大代大魏大统四年，岁次戊午，八月中旬造。',
 ]
 
 export default function Chapter1() {
@@ -120,6 +123,7 @@ export default function Chapter1() {
   const g3Hotspot1Ref = useRef(null)
   const g3Hotspot2Ref = useRef(null)
   const g3Hotspot3Ref = useRef(null)
+  const g3VowHotspotRef = useRef(null)
 
   const togglePanel = (id) => {
     setActivePanel((prev) => (prev === id ? null : id))
@@ -233,6 +237,7 @@ export default function Chapter1() {
       gsap.set(g3VowImgRef.current, { opacity: 0, y: 80 })
       gsap.set(g3DonorImgRef.current, { opacity: 0, y: 80 })
       gsap.set([g3Hotspot1Ref.current, g3Hotspot2Ref.current, g3Hotspot3Ref.current], { opacity: 0 })
+      gsap.set(g3VowHotspotRef.current, { opacity: 0 })
 
       const introChars = g3IntroRef.current.querySelectorAll('.introChar')
       const vowChars = g3VowRef.current.querySelectorAll('.vowChar')
@@ -267,6 +272,7 @@ export default function Chapter1() {
           { opacity: 1, x: 0, y: 0, rotation: 0, scale: 1, duration: 0.7, stagger: { each: 0.01, from: 'random' } },
           '<0.1'
         )
+        .to(g3VowHotspotRef.current, { opacity: 1, duration: 0.3 })
         .to({}, { duration: 0.3 }) // 发愿文停留
         // 3. 既有流程：发愿文飞入题记图片位置
         .to(g3DonorImgRef.current, { opacity: 1, y: 0, duration: 0.6 }, '>')
@@ -581,11 +587,14 @@ export default function Chapter1() {
               ))}
               <br />
               <span className={styles.vowLabel}>
-                {'（文愿发）'.split('').map((ch, ci) => (
+                {'（发愿文）'.split('').map((ch, ci) => (
                   <span key={ci} className={`vowChar ${styles.vowLabelChar}`} style={{ display: 'inline-block' }}>{ch}</span>
                 ))}
               </span>
             </blockquote>
+            <div ref={g3VowHotspotRef} style={{ position: 'absolute', right: '8%', top: '35%' }}>
+              <Hotspot x={0} y={0} active={activePanel === 'vowExhibit'} onClick={() => togglePanel('vowExhibit')} />
+            </div>
           </div>
           <div ref={g3DonorImgRef} style={{ position: 'relative', width: '90vw', marginLeft: 'calc(-45vw + 50%)', overflow: 'visible' }}>
             <img
@@ -612,6 +621,7 @@ export default function Chapter1() {
             <ExhibitPanel title={exhibits.shiChongji.title} description={exhibits.shiChongji.description} visible={activePanel === 'shiChongji'} onClose={() => setActivePanel(null)} />
             <ExhibitPanel title={exhibits.biqiu.title} description={exhibits.biqiu.description} visible={activePanel === 'biqiu'} onClose={() => setActivePanel(null)} />
             <ExhibitPanel title={exhibits.yinAnGui.title} description={exhibits.yinAnGui.description} visible={activePanel === 'yinAnGui'} onClose={() => setActivePanel(null)} />
+            <ExhibitPanel title={exhibits.vowExhibit.title} description={exhibits.vowExhibit.description} visible={activePanel === 'vowExhibit'} onClose={() => setActivePanel(null)} />
           </div>
         </div>
       </div>
